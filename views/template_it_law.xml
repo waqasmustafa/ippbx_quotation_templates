@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Standalone portal content template for the "IT Law Proposal" quotation design.
+        Not inherited from portal.portal_sidebar - it is t-call'd by
+        portal_sale_order_switch.xml when sale_order.quotation_template_id points here.
+
+        Structure and savings-calculation formula follow the Non Profit Proposal
+        template (3 Studio fields: user count, monthly rate, onsite rate; savings
+        compared with $159/$259-per-user benchmarks) per the agreed pattern - only
+        the marketing content sections differ per vertical, sourced from the
+        boss's "IT IT Law Proposal.html" file.
+    -->
+    <template id="quotation_template_content_it_law" name="Quotation Portal - IT Law Proposal">
+        <style>
+
+        .itl-quote {
+          --itl-navy: #071a2f; --itl-navy2: #0b2b50; --itl-accent: #9b6b24; --itl-accent-soft: #fbf3e6;
+          --itl-cyan: #43c8f2; --itl-green: #32b980; --itl-ink: #172338; --itl-muted: #617086;
+          --itl-line: #dbe5ee; --itl-soft: #f4f8fc; --itl-shadow: 0 18px 52px rgba(7,26,47,.10);
+          font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+          color: var(--itl-ink);
+        }
+        .itl-quote h1, .itl-quote h2, .itl-quote h3, .itl-quote h4 { margin-top: 0; line-height: 1.15; letter-spacing: -.035em; }
+        .itl-muted { color: var(--itl-muted); }
+
+        .itl-hero {
+          position: relative; overflow: hidden; color: #fff;
+          padding: 48px 40px; margin-bottom: 28px; border-radius: 24px;
+          background: radial-gradient(circle at 80% 15%, rgba(155,107,36,.20), transparent 28%),
+                      radial-gradient(circle at 15% 15%, rgba(31,111,235,.20), transparent 28%),
+                      linear-gradient(145deg, #061426, #0b2b50 65%, #071a2f);
+        }
+        .itl-hero-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 36px; align-items: center; }
+        .itl-eyebrow {
+          display: inline-flex; align-items: center; gap: 9px; padding: 8px 12px;
+          border: 1px solid rgba(67,200,242,.30); border-radius: 999px;
+          background: rgba(255,255,255,.06); color: #c8efff; font-size: .8rem;
+          font-weight: 850; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 18px;
+        }
+        .itl-eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--itl-cyan); box-shadow: 0 0 16px var(--itl-cyan); }
+        .itl-hero h1 { font-size: clamp(1.9rem, 3.4vw, 2.9rem); margin-bottom: 14px; }
+        .itl-hero .itl-lead { color: #d8e5f0; font-size: 1.05rem; max-width: 620px; }
+        .itl-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+
+        .itl-btn {
+          display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+          min-height: 46px; padding: 0 18px; border-radius: 12px; font-weight: 850;
+          border: 1px solid transparent; transition: .2s ease; cursor: pointer;
+        }
+        .itl-btn-primary { color: #fff !important; background: linear-gradient(135deg, var(--itl-accent), #0b2b50) !important; box-shadow: 0 12px 28px rgba(0,0,0,.20); border-color: transparent !important; }
+        .itl-btn-secondary, .itl-btn-light { color: #fff !important; border-color: rgba(255,255,255,.22) !important; background: rgba(255,255,255,.06) !important; }
+        .itl-btn:hover { transform: translateY(-2px); }
+
+        .itl-proposal-card {
+          padding: 26px; border-radius: 20px; border: 1px solid rgba(255,255,255,.14);
+          background: rgba(4,17,31,.58); box-shadow: 0 20px 60px rgba(0,0,0,.18);
+        }
+        .itl-proposal-card h3 { color: #fff; margin-bottom: 16px; font-size: 1.15rem; }
+        .itl-proposal-meta { display: grid; gap: 10px; }
+        .itl-proposal-meta > div { padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,.06); }
+        .itl-proposal-meta span { display: block; color: #9fb7c9; font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 800; }
+        .itl-proposal-meta strong { display: block; color: #fff; margin-top: 4px; }
+        [data-id="total_amount"] { display: inline-flex !important; align-items: baseline; gap: 2px; white-space: nowrap; }
+        [data-id="total_amount"] * { display: inline !important; }
+
+        .itl-section-label { color: var(--itl-accent); font-size: .78rem; font-weight: 900; letter-spacing: .10em; text-transform: uppercase; margin-bottom: 8px; }
+
+        .itl-card { padding: 28px; border-radius: 20px; background: #fff; border: 1px solid var(--itl-line); box-shadow: 0 12px 38px rgba(7,26,47,.06); margin-bottom: 24px; }
+        .itl-intro-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: start; }
+        .itl-callout { padding: 26px; border-radius: 20px; border: 1px solid var(--itl-line); background: linear-gradient(145deg, var(--itl-accent-soft), #ffffff); box-shadow: 0 14px 40px rgba(7,26,47,.05); }
+        .itl-callout strong { display: block; font-size: 1.2rem; margin-bottom: 8px; }
+
+        .itl-priority-grid, .itl-workflow-grid, .itl-apps-grid, .itl-metrics-grid,
+        .itl-service-grid, .itl-outcome-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 10px; }
+        .itl-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: var(--itl-accent-soft); color: var(--itl-accent); font-weight: 950; margin-bottom: 14px; }
+        .itl-inner-card { padding: 24px; border-radius: 18px; background: #fff; border: 1px solid var(--itl-line); }
+        .itl-inner-card p { color: var(--itl-muted); margin-bottom: 0; }
+
+        .itl-phone-stack { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 10px; }
+        .itl-phone-card { padding: 22px; border-radius: 17px; border: 1px solid var(--itl-line); background: linear-gradient(155deg,#fff,#f7fafd); }
+        .itl-phone-card span { display: inline-flex; padding: 6px 9px; border-radius: 999px; background: var(--itl-accent-soft); color: var(--itl-accent); font-size: .72rem; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 12px; }
+        .itl-phone-card p { color: var(--itl-muted); font-size: .89rem; margin-bottom: 0; }
+
+        .itl-dark-block { color: #fff; border-radius: 22px; padding: 34px; margin-bottom: 24px; background: linear-gradient(145deg, var(--itl-navy), var(--itl-navy2)); }
+        .itl-dark-block .itl-section-label { color: var(--itl-cyan); }
+        .itl-connection-flow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 20px; }
+        .itl-connection-flow div { padding: 14px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.06); text-align: center; font-size: .8rem; font-weight: 800; }
+
+        .itl-workflow-card { padding: 22px; border-radius: 17px; border: 1px solid var(--itl-line); background: linear-gradient(155deg,#fff,#f7fafd); }
+        .itl-workflow-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+        .itl-workflow-card p { color: var(--itl-muted); font-size: .89rem; margin: 0; }
+
+        .itl-safe-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 22px; margin-top: 10px; }
+        .itl-safe-quote { padding: 26px; border-radius: 20px; color: #fff; background: linear-gradient(145deg, var(--itl-navy), var(--itl-navy2)); }
+        .itl-safe-quote strong { display: block; font-size: 1.4rem; line-height: 1.2; margin-bottom: 10px; }
+        .itl-safe-quote p { color: #c7d9e7; margin-bottom: 0; }
+        .itl-safe-controls { display: grid; gap: 10px; }
+        .itl-safe-control { padding: 16px 18px; border-radius: 14px; border: 1px solid var(--itl-line); background: #fff; }
+        .itl-safe-control strong { display: block; margin-bottom: 4px; }
+        .itl-safe-control p { color: var(--itl-muted); margin-bottom: 0; font-size: .87rem; }
+
+        .itl-app-card { min-height: 150px; padding: 20px; border-radius: 16px; border: 1px solid var(--itl-line); background: linear-gradient(155deg,#fff,#f7fafd); }
+        .itl-app-card h4 { font-size: .96rem; margin-bottom: 6px; letter-spacing: -.02em; }
+        .itl-app-card p { color: var(--itl-muted); font-size: .84rem; margin-bottom: 0; }
+
+        .itl-service-card { min-height: 150px; padding: 20px; border-radius: 16px; border: 1px solid var(--itl-line); background: linear-gradient(155deg,#fff,#f7fafd); }
+        .itl-service-card h4 { font-size: .96rem; margin-bottom: 6px; letter-spacing: -.02em; }
+        .itl-service-card p { color: var(--itl-muted); font-size: .84rem; margin-bottom: 0; }
+
+        .itl-outcome-card { padding: 22px; border-radius: 16px; border: 1px solid var(--itl-line); background: #fff; }
+        .itl-outcome-card strong { display: block; color: var(--itl-accent); font-size: 1.05rem; margin-bottom: 6px; }
+        .itl-outcome-card p { color: var(--itl-muted); margin: 0; font-size: .89rem; }
+
+        .itl-experience-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 10px; }
+        .itl-experience-card { padding: 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.06); }
+        .itl-experience-card span { display: block; color: var(--itl-cyan); font-size: .74rem; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+        .itl-experience-card p { color: #c2d5e4; margin: 0; font-size: .88rem; }
+
+        .itl-phase-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 10px; }
+        .itl-phase-card { padding: 18px; border-radius: 16px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
+        .itl-phase-card span { display: block; color: var(--itl-cyan); font-size: .76rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+        .itl-phase-card p { color: #bed0df; margin: 4px 0 0; font-size: .86rem; }
+
+        .itl-metric-card { padding: 20px; border-radius: 16px; border: 1px solid var(--itl-line); background: #fff; }
+        .itl-metric-card strong { display: block; font-size: .95rem; margin-bottom: 5px; }
+        .itl-metric-card p { color: var(--itl-muted); font-size: .84rem; margin: 0; }
+
+        .itl-pricing-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid var(--itl-line); border-radius: 18px; box-shadow: 0 12px 40px rgba(7,26,47,.05); margin-top: 20px; }
+        .itl-pricing-table th, .itl-pricing-table td { padding: 16px 18px; border-bottom: 1px solid var(--itl-line); text-align: left; vertical-align: top; }
+        .itl-pricing-table th { background: var(--itl-accent-soft); color: var(--itl-navy); }
+        .itl-pricing-table tr:last-child td { border-bottom: none; }
+        .itl-pricing-table td:last-child { font-weight: 850; }
+        .itl-native-note { padding: 20px; border-radius: 16px; border: 1px solid var(--itl-line); background: linear-gradient(145deg, var(--itl-accent-soft), #fff); color: var(--itl-muted); margin-bottom: 6px; }
+        .itl-native-note strong { color: var(--itl-ink); }
+        .itl-totals { margin-top: 18px; display: grid; gap: 6px; max-width: 320px; margin-left: auto; }
+        .itl-totals-row { display: flex; justify-content: space-between; padding: 8px 0; }
+        .itl-totals-row span { color: var(--itl-ink) !important; }
+        .itl-totals-total { font-weight: 900; font-size: 1.2rem; border-top: 1px solid var(--itl-line); padding-top: 12px; }
+        .itl-totals-total span { color: var(--itl-navy) !important; }
+
+        .itl-savings-clarification { margin-top: 22px; padding: 22px 24px; border-radius: 18px; border: 1px solid #bfe4d3; background: linear-gradient(145deg,#effbf6,#fff); }
+        .itl-savings-clarification h3 { margin: 0 0 6px; color: #115f43 !important; font-size: 1.1rem; }
+        .itl-savings-clarification p { margin: 0; color: var(--itl-muted) !important; }
+        .itl-savings { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 16px; }
+        .itl-savings-card { padding: 22px; border-radius: 16px; border: 1px solid #bfe4d3; background: #fff; text-align: center; }
+        .itl-savings-card strong { display: block; color: #126243 !important; font-size: 1.8rem; margin-bottom: 8px; }
+        .itl-savings-card span { display: block; color: var(--itl-ink) !important; font-size: .9rem; font-weight: 800; }
+        .itl-savings-card small { display: block; margin-top: 10px; padding: 9px; background: #f2f8f5; color: var(--itl-muted) !important; border-radius: 10px; }
+        .itl-optional-note { margin-top: 16px; padding: 18px 20px; border-radius: 15px; border: 1px solid var(--itl-line); background: #f8fafc; color: var(--itl-muted); }
+        .itl-optional-note strong { color: var(--itl-ink); }
+
+        .itl-cta { color: #fff; border-radius: 24px; padding: 40px; margin: 8px 0 24px; background: radial-gradient(circle at 80% 25%, rgba(155,107,36,.20), transparent 28%), linear-gradient(145deg, #071a2f, #0b3159); }
+        .itl-cta-grid { display: grid; grid-template-columns: 1fr auto; gap: 26px; align-items: center; }
+        .itl-cta p { color: #c6d7e5; max-width: 640px; margin: 10px 0 0; }
+
+        .itl-footer { background: #04111f; color: #9db3c4; padding: 22px 26px; font-size: .86rem; border-radius: 18px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+        .itl-quote #sale_order_portal_sidebar {
+          color: #fff;
+          background: radial-gradient(circle at 85% 10%, rgba(155,107,36,.20), transparent 32%), linear-gradient(150deg, var(--itl-navy), var(--itl-navy2));
+          border-radius: 22px; border: 1px solid rgba(255,255,255,.12); box-shadow: var(--itl-shadow); padding: 8px;
+        }
+        .itl-side-total-label { display: block; text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; font-weight: 800; color: #9fb7c9; margin-bottom: 4px; }
+        .itl-side-total-amount { color: #fff; font-size: 2rem; font-weight: 900; }
+        .itl-advantage { padding: 13px 15px; border-radius: 12px; background: rgba(255,255,255,.06); }
+        .itl-advantage-total { color: var(--itl-cyan); }
+        .itl-contact-card { color: #fff; }
+        .itl-contact-card .itl-muted { color: #9fb7c9; }
+
+        /* The live site's theme forces its own text colors on p/h1-h4/span with enough
+           specificity to beat inherited color, so text on our white cards is forced
+           back to ink here (same fix used on the Modern Digital Workplace template). */
+        .itl-card h1, .itl-card h2, .itl-card h3, .itl-card h4,
+        .itl-inner-card h3, .itl-inner-card h4,
+        .itl-phone-card h3, .itl-workflow-card h3, .itl-app-card h4, .itl-safe-control strong, .itl-metric-card strong {
+          color: var(--itl-ink) !important;
+        }
+        .itl-card p:not(.itl-muted), .itl-card div:not(.itl-muted):not(.itl-icon), .itl-card span:not(.itl-muted):not(.itl-badge),
+        .itl-card strong, .itl-card b, .itl-card ul:not(.itl-muted),
+        .itl-inner-card p:not(.itl-muted), .itl-phone-card p:not(.itl-muted), .itl-workflow-card p:not(.itl-muted),
+        .itl-app-card p:not(.itl-muted), .itl-safe-control p:not(.itl-muted), .itl-metric-card p:not(.itl-muted) {
+          color: var(--itl-ink) !important;
+        }
+        .itl-muted { color: var(--itl-muted) !important; }
+        .itl-pricing-table th { color: var(--itl-navy) !important; }
+        .itl-pricing-table td { color: var(--itl-ink) !important; }
+
+        /* .itl-safe-quote is a dark navy block nested inside the light .itl-card
+           "Keep What Works" section, so the ink-forcing rules above catch it too -
+           restore its light text here with higher specificity to win back. */
+        .itl-quote .itl-card .itl-safe-quote,
+        .itl-quote .itl-card .itl-safe-quote strong {
+          color: #fff !important;
+        }
+        .itl-quote .itl-card .itl-safe-quote p {
+          color: #c7d9e7 !important;
+        }
+        /* Same issue for .itl-outcome-card strong - restore its accent color
+           over the generic ink-forcing rule above. */
+        .itl-quote .itl-card .itl-outcome-card strong {
+          color: var(--itl-accent) !important;
+        }
+
+        @media (max-width: 950px) {
+          .itl-hero-grid, .itl-cta-grid, .itl-intro-grid, .itl-safe-grid { grid-template-columns: 1fr; }
+          .itl-priority-grid, .itl-workflow-grid, .itl-apps-grid, .itl-metrics-grid,
+          .itl-phone-stack, .itl-experience-grid, .itl-connection-flow, .itl-phase-grid,
+          .itl-service-grid, .itl-outcome-grid { grid-template-columns: 1fr 1fr; }
+        }
+        /* True phone widths: the 2-column fallback above is still too
+           cramped (cards clipped/overlapping) - drop to a single column. */
+        @media (max-width: 640px) {
+          .itl-priority-grid, .itl-workflow-grid, .itl-apps-grid, .itl-metrics-grid,
+          .itl-phone-stack, .itl-experience-grid, .itl-connection-flow, .itl-phase-grid,
+          .itl-service-grid, .itl-outcome-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+
+        /* Savings clarification block - green "not a charge" styling.
+           Matches the Non Profit Proposal template's own (unprefixed) classes -
+           safe to leave unprefixed since each template's style block only ever
+           renders alongside its own body. */
+        .savings-clarification { margin-top: 30px; padding: 25px 28px; border-radius: 20px; border: 1px solid #bfe4d3; background: linear-gradient(145deg,#effbf6,#fff); }
+        .savings-clarification h3 { margin: 0 0 7px; color: #115f43 !important; }
+        .savings-clarification p { margin: 0; color: #617086 !important; }
+        .savings-heading { text-align: center; margin-top: 30px; }
+        .savings-heading h3 { margin: 5px 0; color: var(--itl-navy) !important; }
+        .savings-heading p { color: var(--itl-muted) !important; }
+        .savings-clear-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 22px; }
+        .savings-clear-card { padding: 26px; border: 1px solid #bfe4d3; border-radius: 18px; text-align: center; background: #fff; }
+        .savings-clear-card::before {
+          content: "ESTIMATED SAVINGS - NOT A CHARGE"; display: inline-flex; padding: 6px 10px; margin-bottom: 14px;
+          border-radius: 999px; background: #e7f8f1; color: #126243; font-size: 11px; font-weight: 800;
+        }
+        .savings-clear-card strong { display: block; font-size: 34px; color: #126243 !important; margin-bottom: 9px; }
+        .savings-clear-card span { display: block; font-weight: 700; color: var(--itl-ink) !important; }
+        .optional-rate-box {
+          display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; margin: 18px 0 24px;
+          padding: 22px; border: 1px solid #d3dfeb; border-radius: 17px; background: #f8fafc;
+        }
+        .optional-rate-box h3 { color: var(--itl-ink) !important; }
+        .optional-rate-box p { margin: 0; color: var(--itl-muted) !important; }
+        .optional-rate-price { padding: 15px 20px; border: 1px solid var(--itl-line); background: #fff; border-radius: 13px; text-align: center; }
+        .optional-rate-price strong { display: block; font-size: 27px; color: var(--itl-ink) !important; }
+        .optional-rate-price span { font-size: 11px; text-transform: uppercase; color: var(--itl-muted) !important; font-weight: 800; }
+        @media (max-width: 700px) {
+          .savings-clear-grid, .optional-rate-box { grid-template-columns: 1fr; }
+        }
+        </style>
+
+        <div class="itl-quote">
+
+          <!-- Hero -->
+          <div class="itl-hero">
+            <div class="itl-hero-grid">
+              <div>
+                <span class="itl-eyebrow">Law Firm IT Proposal</span>
+                <h1>Protect Client Confidence. Keep Every Matter Moving.</h1>
+                <p class="itl-lead">A secure modern workplace for law firms and legal-service organizations—designed around confidentiality, document access, deadlines, remote work, employee transitions, and business continuity.</p>
+                <div class="itl-hero-actions">
+                  <a class="itl-btn itl-btn-primary" href="#pricing">Review the Investment</a>
+                  <a class="itl-btn itl-btn-secondary" href="#continuity">See the Safe Transition</a>
+                </div>
+              </div>
+              <aside class="itl-proposal-card">
+                <h3>Proposal Overview</h3>
+                <div class="itl-proposal-meta">
+                  <div><span>Prepared for</span><strong t-field="sale_order.partner_id.name"/></div>
+                  <div><span>Prepared by</span><strong t-field="sale_order.company_id.name"/></div>
+                  <div><span>Date</span><strong t-field="sale_order.date_order" t-options="{'widget': 'date'}"/></div>
+                  <div t-if="sale_order.validity_date"><span>Expiration Date</span><strong t-field="sale_order.validity_date"/></div>
+                  <div t-if="'plan_id' in sale_order._fields and sale_order.plan_id"><span>Plan</span><strong t-field="sale_order.plan_id.name"/></div>
+                  <div><span>Your contact</span><strong t-field="sale_order.user_id.name"/></div>
+                </div>
+              </aside>
+            </div>
+          </div>
+
+          <!-- Executive Summary -->
+          <div class="itl-card">
+            <div class="itl-intro-grid">
+              <div>
+                <div class="itl-section-label">Executive Summary</div>
+                <h2 style="font-size:1.7rem;">A workplace designed around the work that matters most</h2>
+                <p>Legal teams depend on continuous access to email, case-management systems, documents, billing, calendars, communications, research, and client information. A technology interruption can affect deadlines, responsiveness, and client confidence.</p>
+                <p class="itl-muted">IPPBX brings secure workplace delivery, employee support, communications, managed security, Google Workspace backup, asset management, and recovery planning into one operating environment.</p>
+                <p class="itl-muted">The transition is designed to preserve familiar legal workflows while reducing dependence on individual devices and disconnected support tools.</p>
+              </div>
+              <div class="itl-callout">
+                <strong>Client matters should not stop because one laptop, one account, or one location becomes unavailable.</strong>
+                <p class="itl-muted">IPPBX improves the foundation underneath employee work by connecting support, communications, cybersecurity, backup, assets, continuity, and future AI readiness.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Industry Priorities -->
+          <div class="itl-card">
+            <div class="itl-section-label">Industry Priorities</div>
+            <h2 style="font-size:1.7rem;">What this proposal is designed to protect and improve</h2>
+            <div class="itl-priority-grid">
+              <article class="itl-card" style="margin-bottom:0;"><div class="itl-icon">01</div><h3>Client Confidentiality</h3><p class="itl-muted">Strengthen role-based access, endpoint monitoring, backup, security awareness, and employee offboarding.</p></article>
+              <article class="itl-card" style="margin-bottom:0;"><div class="itl-icon">02</div><h3>Matter &amp; Document Access</h3><p class="itl-muted">Keep authorized attorneys and staff connected to approved case, document, and collaboration systems.</p></article>
+              <article class="itl-card" style="margin-bottom:0;"><div class="itl-icon">03</div><h3>Deadline Continuity</h3><p class="itl-muted">Reduce disruption around court dates, filings, closings, discovery, and client commitments.</p></article>
+              <article class="itl-card" style="margin-bottom:0;"><div class="itl-icon">04</div><h3>Secure Remote Work</h3><p class="itl-muted">Provide a consistent managed workplace for authorized attorneys and staff outside the office.</p></article>
+              <article class="itl-card" style="margin-bottom:0;"><div class="itl-icon">05</div><h3>Employee Transitions</h3><p class="itl-muted">Prepare new hires quickly and remove access centrally when an attorney, paralegal, or staff member leaves.</p></article>
+              <article class="itl-card" style="margin-bottom:0;"><div class="itl-icon">06</div><h3>Email &amp; Phishing Defense</h3><p class="itl-muted">Address impersonation, payment diversion, malicious attachments, credential theft, and client-targeted fraud.</p></article>
+            </div>
+          </div>
+
+          <!-- Protect What Already Works / Safe Transition -->
+          <div class="itl-card" id="continuity">
+            <div class="itl-section-label">Protect What Already Works</div>
+            <h2 style="font-size:1.7rem;">Everything works today. The transition is designed to keep it that way.</h2>
+            <p class="itl-muted" style="max-width:900px;">A functioning environment should not be replaced by a risky, organization-wide cutover. IPPBX documents what employees depend on, builds the new environment first, pilots with real users, and moves one controlled group at a time.</p>
+            <div class="itl-safe-grid" style="margin-top:10px;">
+              <div class="itl-safe-quote">
+                <strong>Same work. Same familiar tools. A better foundation underneath.</strong>
+                <p>Where practical, employees continue using approved case-management, document-management, billing, research, email, calendars, phone extensions, voicemail, templates, printers, scanners, and established legal workflows. The first improvements happen in delivery, support, monitoring, backup, access control, and recovery.</p>
+              </div>
+              <div class="itl-safe-controls">
+                <div class="itl-safe-control"><strong>Document before changing</strong><p>Inventory applications, files, devices, printers, communications, access, and critical workflows.</p></div>
+                <div class="itl-safe-control"><strong>Build before moving</strong><p>Prepare and validate the workplace before a department is asked to depend on it.</p></div>
+                <div class="itl-safe-control"><strong>Pilot with real employees</strong><p>Test normal daily work - not merely whether the technology turns on.</p></div>
+                <div class="itl-safe-control"><strong>Move department by department</strong><p>No "big bang" migration. Each group moves after agreed requirements are validated.</p></div>
+                <div class="itl-safe-control"><strong>Support visible changes</strong><p>Explain MFA, secure sign-in, or other necessary changes in advance and support employees during launch.</p></div>
+              </div>
+            </div>
+            <div class="itl-optional-note" style="margin-top:18px;"><strong>Honest expectation:</strong> some security improvements may be visible. The objective is minimal disruption and no surprises - not a promise that necessary safeguards will remain invisible.</div>
+          </div>
+
+          <!-- Industry Workflows -->
+          <div class="itl-card">
+            <div class="itl-section-label">Industry Workflows</div>
+            <h2 style="font-size:1.7rem;">Technology aligned with how the organization actually operates</h2>
+            <div class="itl-workflow-grid">
+              <article class="itl-workflow-card"><h3>Case &amp; Matter Management</h3><p>Support approved practice-management and matter-tracking systems used across teams.</p></article>
+              <article class="itl-workflow-card"><h3>Document Management</h3><p>Keep authorized users connected to document repositories, templates, shared files, and collaboration tools.</p></article>
+              <article class="itl-workflow-card"><h3>Time, Billing &amp; Accounting</h3><p>Support approved timekeeping, billing, trust-accounting, and financial applications.</p></article>
+              <article class="itl-workflow-card"><h3>Court &amp; Client Deadlines</h3><p>Prioritize continuity for calendars, filings, closings, discovery, and time-sensitive communications.</p></article>
+              <article class="itl-workflow-card"><h3>Remote Attorneys &amp; Staff</h3><p>Provide secured access from approved devices and locations without rebuilding each environment.</p></article>
+              <article class="itl-workflow-card"><h3>Client Communications</h3><p>Coordinate phones, voicemail, email, meetings, and support around client-facing responsiveness.</p></article>
+            </div>
+          </div>
+
+          <!-- Implementation Approach -->
+          <div class="itl-dark-block">
+            <div class="itl-section-label">Implementation Approach</div>
+            <h2 style="font-size:1.6rem;">A controlled transition with evidence at every step</h2>
+            <div class="itl-phase-grid">
+              <article class="itl-phase-card"><span>Phase 1</span><h3 style="font-size:1rem;color:#fff;">Discovery</h3><p>Review users, devices, applications, data, communications, security, vendors, support history, and risks.</p></article>
+              <article class="itl-phase-card"><span>Phase 2</span><h3 style="font-size:1rem;color:#fff;">Design</h3><p>Define user profiles, access, applications, storage, security, backup, documentation, and rollout safeguards.</p></article>
+              <article class="itl-phase-card"><span>Phase 3</span><h3 style="font-size:1rem;color:#fff;">Pilot</h3><p>Test representative employees completing real daily work. No broader group moves until the pilot is validated.</p></article>
+              <article class="itl-phase-card"><span>Phase 4</span><h3 style="font-size:1rem;color:#fff;">Rollout</h3><p>Move controlled groups with advance communication, support, validation, and post-migration follow-up.</p></article>
+              <article class="itl-phase-card"><span>Phase 5</span><h3 style="font-size:1rem;color:#fff;">Optimize</h3><p>Review support, security, backup, assets, employee feedback, lifecycle priorities, and future automation opportunities.</p></article>
+            </div>
+          </div>
+
+          <!-- Included Managed Services -->
+          <div class="itl-card">
+            <div class="itl-section-label">Included Managed Services</div>
+            <h2 style="font-size:1.7rem;">Support, security, backup, planning, and continuity in one operating program</h2>
+            <div class="itl-service-grid">
+              <article class="itl-service-card"><h4>Secure Digital Workplace</h4><p>Managed employee workspace, identity, application delivery, file access, remote work, and standard user profiles.</p></article>
+              <article class="itl-service-card"><h4>Employee Help Desk</h4><p>Login, access, application, onboarding, offboarding, password, phone, voicemail, and escalation support.</p></article>
+              <article class="itl-service-card"><h4>IPPBX Communications</h4><p>Extension creation, voicemail, phone onboarding, documentation, routing support, and employee assistance.</p></article>
+              <article class="itl-service-card"><h4>Managed SOC Services</h4><p>Centralized monitoring, alert review, investigation support, incident oversight, and meaningful escalation.</p></article>
+              <article class="itl-service-card"><h4>Behavioral MDR</h4><p>Behavior-based detection and managed response designed to identify suspicious activity beyond basic antivirus.</p></article>
+              <article class="itl-service-card"><h4>Phishing &amp; Awareness</h4><p>Managed simulations, education, follow-up, participation reporting, and risk-trend visibility.</p></article>
+              <article class="itl-service-card"><h4>Google Workspace Backup</h4><p>Managed backup for Gmail, Drive, Chat, Calendar, and Contacts beyond native retention options.</p></article>
+              <article class="itl-service-card"><h4>Asset Management</h4><p>Track devices, assigned users, ownership, status, age, warranty information, and replacement needs.</p></article>
+              <article class="itl-service-card"><h4>Roadmapping &amp; Lifecycle</h4><p>Plan replacements, renewals, upgrades, priorities, and budget needs before they become emergencies.</p></article>
+              <article class="itl-service-card"><h4>Security Reporting</h4><p>Leadership-ready visibility into security activity, posture, improvements, risks, and open recommendations.</p></article>
+              <article class="itl-service-card"><h4>Business Continuity &amp; DR</h4><p>Document recovery priorities, backup coordination, critical systems, responsibilities, and restoration procedures.</p></article>
+              <article class="itl-service-card"><h4>AI-Ready Foundation</h4><p>Organize identity, systems, information, permissions, and workflows for responsible future automation.</p></article>
+            </div>
+          </div>
+
+          <!-- Expected Outcomes -->
+          <div class="itl-card">
+            <div class="itl-section-label">Expected Outcomes</div>
+            <h2 style="font-size:1.7rem;">What success should look like after rollout</h2>
+            <div class="itl-outcome-grid">
+              <article class="itl-outcome-card"><strong>Faster legal onboarding</strong><p>Prepare approved applications, matter access, email, phone, and security before the employee begins.</p></article>
+              <article class="itl-outcome-card"><strong>Reduced device risk</strong><p>Replace a failed endpoint without reconstructing every part of the user's legal workplace.</p></article>
+              <article class="itl-outcome-card"><strong>Clearer access control</strong><p>Tie access to role and matter requirements rather than uncontrolled local configurations.</p></article>
+              <article class="itl-outcome-card"><strong>Stronger phishing defense</strong><p>Train employees to recognize payment diversion, impersonation, and credential attacks.</p></article>
+              <article class="itl-outcome-card"><strong>Recovery planning</strong><p>Identify critical systems, recovery priorities, backup coverage, and decision responsibilities.</p></article>
+              <article class="itl-outcome-card"><strong>Future-ready workflows</strong><p>Create a cleaner foundation for responsible legal research, knowledge, intake, and administrative AI use.</p></article>
+            </div>
+          </div>
+
+          <div class="row o_portal_sale_sidebar">
+            <!-- Sidebar (sticky - required for Sign &amp; Pay / navspy to keep working) -->
+            <t t-call="portal.portal_record_sidebar" id="sale_order_portal_sidebar">
+              <t t-set="classes" t-value="'col-lg-4 col-xxl-3 d-print-none'"/>
+
+              <t t-set="title">
+                <span class="itl-side-total-label">Total</span>
+                <h2 t-field="sale_order.amount_total" data-id="total_amount" class="itl-side-total-amount mb-0 text-break"/>
+              </t>
+
+              <t t-set="entries">
+                <div class="d-flex flex-column gap-4 mt-3">
+                  <div class="d-flex flex-column gap-2" id="sale_order_sidebar_button">
+                    <a t-if="sale_order._has_to_be_signed()" role="button" class="btn itl-btn itl-btn-primary" data-bs-toggle="modal" data-bs-target="#modalaccept" href="#">
+                      <i class="fa fa-check"/><t t-if="sale_order._has_to_be_paid()"> Sign &amp; Pay</t><t t-else=""> Accept &amp; Sign</t>
+                    </a>
+                    <a t-elif="sale_order._has_to_be_paid()" role="button" id="o_sale_portal_paynow" data-bs-toggle="modal" data-bs-target="#modalaccept" href="#" t-att-class="'btn itl-btn %s' % ('itl-btn-light' if sale_order.transaction_ids else 'itl-btn-primary')">
+                      <i class="fa fa-check"/> <t t-if="not sale_order.signature">Accept &amp; Pay</t><t t-else="">Pay Now</t>
+                    </a>
+                    <div class="o_download_pdf d-flex gap-2 flex-lg-column flex-xl-row flex-wrap">
+                      <a class="btn itl-btn itl-btn-light o_print_btn o_portal_invoice_print flex-grow-1" t-att-href="sale_order.get_portal_url(report_type='pdf')" id="print_invoice_report" title="View Details" role="button" target="_blank"><i class="fa fa-print me-1"/>View Details</a>
+                    </div>
+                  </div>
+
+                  <t t-if="not sale_order.is_expired and sale_order.state in ['draft', 'sent']">
+                    <div t-if="sale_order.amount_undiscounted - sale_order.amount_untaxed &gt; 0.01" class="itl-advantage" name="sale_order_advantage">
+                      <small><b class="itl-muted">Your advantage</b></small>
+                      <small>
+                        <b t-field="sale_order.amount_undiscounted" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: sale_order.currency_id}" style="text-decoration: line-through" class="d-block mt-1" data-id="amount_undiscounted"/>
+                      </small>
+                      <t t-if="sale_order.amount_untaxed == sale_order.amount_total">
+                        <h4 t-field="sale_order.amount_total" class="itl-advantage-total" data-id="total_amount"/>
+                      </t>
+                      <t t-else="">
+                        <h4 t-field="sale_order.amount_untaxed" class="itl-advantage-total mb-0" data-id="total_untaxed"/>
+                        <small>(<span t-field="sale_order.amount_total" data-id="total_amount"/> Incl. tax)</small>
+                      </t>
+                    </div>
+                  </t>
+
+                  <div t-if="sale_order.user_id" class="itl-contact-card">
+                    <h6><small class="itl-muted">Your contact</small></h6>
+                    <t t-call="portal.portal_my_contact">
+                      <t t-set="_contactAvatar" t-value="image_data_uri(sale_order.user_id.avatar_128)"/>
+                      <t t-set="_contactName" t-value="sale_order.user_id.name"/>
+                      <t t-set="_contactLink" t-value="True"/>
+                    </t>
+                  </div>
+                </div>
+              </t>
+            </t>
+
+            <!-- Page content -->
+            <div id="quote_content" class="col-12 col-lg-8 col-xxl-9 mt-5 mt-lg-0">
+
+              <!-- modal relative to the actions sign and pay (unchanged from stock Odoo) -->
+              <div role="dialog" class="modal fade" id="modalaccept" name="sale_order_modal_sign_and_pay">
+                <div class="modal-dialog" t-if="sale_order._has_to_be_signed()">
+                  <form id="accept" method="POST" t-att-data-order-id="sale_order.id" t-att-data-token="sale_order.access_token" class="js_accept_json modal-content js_website_submit_form">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <header class="modal-header">
+                      <h4 class="modal-title">Validate Order</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                    </header>
+                    <main class="modal-body" id="sign-dialog">
+                      <span>
+                        By signing, you confirm acceptance on behalf of
+                        <b t-field="sale_order.partner_id.commercial_partner_id"/>
+                        for the <b data-id="total_amount" t-field="sale_order.amount_total"/> quote.
+                      </span>
+                      <b t-if="sale_order.payment_term_id" t-field="sale_order.payment_term_id.note"/>
+                      <t t-call="portal.signature_form">
+                        <t t-set="call_url" t-value="sale_order.get_portal_url(suffix='/accept')"/>
+                        <t t-set="default_name" t-value="sale_order.partner_id.name"/>
+                      </t>
+                    </main>
+                  </form>
+                </div>
+
+                <div class="modal-dialog" t-if="not sale_order._has_to_be_signed() and sale_order._has_to_be_paid()" name="sale_order_modal_validate">
+                  <div class="modal-content">
+                    <header class="modal-header">
+                      <h4 class="modal-title">Validate Order</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                    </header>
+                    <main class="modal-body" id="sign-dialog">
+                      <t t-set="prepayment_amount" t-value="sale_order._get_prepayment_required_amount()"/>
+                      <t t-set="prepayment_available" t-value="sale_order.prepayment_percent and sale_order.prepayment_percent != 1.0"/>
+                      <div t-if="prepayment_available" id="o_sale_portal_prepayment_buttons" class="d-flex btn-group mb-3" role="group">
+                        <button name="o_sale_portal_amount_prepayment_button" class="btn btn-light active">
+                          Down payment <br/>
+                          <span t-esc="prepayment_amount" class="fw-bold" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+                        </button>
+                        <button name="o_sale_portal_amount_total_button" class="btn btn-light">
+                          Full amount <br/>
+                          <span class="fw-bold" t-field="sale_order.amount_total"/>
+                        </button>
+                      </div>
+                      <div class="mb-3">
+                        <span t-if="prepayment_available">
+                          <span id="o_sale_portal_use_amount_prepayment">
+                            By paying a <u>down payment</u> of
+                            <span t-esc="prepayment_amount" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}" class="fw-bold"/>
+                            (<b t-esc="sale_order.prepayment_percent * 100"/>%),
+                          </span>
+                          <span id="o_sale_portal_use_amount_total">
+                            By paying,
+                          </span>
+                        </span>
+                        <span t-else="">
+                          By paying,
+                        </span>
+                        you confirm acceptance on the behalf of <b t-field="sale_order.partner_id.commercial_partner_id"/>
+                        for the <b data-id="total_amount" t-field="sale_order.amount_total"/> quote.
+                        <b t-if="sale_order.payment_term_id" t-field="sale_order.payment_term_id.note" class="o_sale_payment_terms"/>
+                      </div>
+                      <div t-if="company_mismatch">
+                        <t t-call="payment.company_mismatch_warning"/>
+                      </div>
+                      <div t-elif="not sale_order._has_to_be_paid()" class="alert alert-danger">
+                        The order is not in a state requiring customer payment.
+                      </div>
+                      <div t-else="" id="payment_method" class="text-start mt-0">
+                        <t t-call="payment.form">
+                          <t t-set="sale_order_id" t-value="sale_order.id"/>
+                        </t>
+                      </div>
+                    </main>
+                  </div>
+                </div>
+              </div>
+
+              <div role="dialog" class="modal fade" id="modaldecline">
+                <div class="modal-dialog">
+                  <form id="decline" method="POST" t-attf-action="/my/orders/#{sale_order.id}/decline?access_token=#{sale_order.access_token}" class="modal-content">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <header class="modal-header">
+                      <h4 class="modal-title">Reject This Quotation</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                    </header>
+                    <main class="modal-body">
+                      <p>Tell us why you are refusing this quotation, this will help us improve our services.</p>
+                      <textarea rows="4" name="decline_message" required="" placeholder="Your feedback..." class="form-control"/>
+                    </main>
+                    <footer class="modal-footer">
+                      <button type="submit" t-att-id="sale_order.id" class="btn btn-danger"><i class="fa fa-times"/> Reject</button>
+                      <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                    </footer>
+                  </form>
+                </div>
+              </div>
+
+              <!-- status messages (unchanged from stock Odoo) -->
+              <div t-if="message == 'sign_ok'" class="alert alert-success alert-dismissible d-print-none" role="status">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
+                <strong>Thank You!</strong><br/>
+                <t t-if="message == 'sign_ok' and sale_order.state == 'sale'">Your order has been confirmed.</t>
+                <t t-elif="message == 'sign_ok' and sale_order._has_to_be_paid()">Your order has been signed but still needs to be paid to be confirmed.</t>
+                <t t-else="">Your order has been signed.</t>
+              </div>
+              <div t-if="message == 'cant_reject'" class="alert alert-danger alert-dismissible d-print-none" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
+                Your order is not in a state to be rejected.
+              </div>
+              <t t-if="sale_order.get_portal_last_transaction()">
+                <t t-call="payment.state_header">
+                  <t t-set="tx" t-value="sale_order.get_portal_last_transaction()"/>
+                </t>
+              </t>
+              <div t-if="sale_order.state == 'cancel'" class="alert alert-danger alert-dismissible d-print-none" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"/>
+                <strong>This quotation has been cancelled.</strong> <a role="button" href="#discussion"><i class="fa fa-comment"/> Contact us to get a new quotation.</a>
+              </div>
+              <div t-if="sale_order.is_expired" class="alert alert-warning alert-dismissible d-print-none" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"/>
+                <strong>This offer expired!</strong> <a role="button" href="#discussion"><i class="fa fa-comment"/> Contact us to get a new quotation.</a>
+              </div>
+
+              <div t-attf-class="#{'pb-5' if report_type == 'html' else ''}" id="portal_sale_content">
+
+                <!-- Billing Details -->
+                <div class="itl-card">
+                  <div class="itl-section-label">Billing Details</div>
+                  <h2 style="font-size:1.5rem;">Invoicing and Shipping Address</h2>
+                  <div t-field="sale_order.partner_invoice_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone'], 'no_marker': True}"/>
+                </div>
+
+                <!-- Products (dynamic - sale_order.order_line) -->
+                <div class="itl-card" id="pricing">
+                  <div class="itl-section-label">Commercial Proposal</div>
+                  <h2 style="font-size:1.5rem;">Products</h2>
+                  <table class="itl-pricing-table">
+                    <thead><tr><th>Products</th><th>Quantity</th><th>Unit Price</th><th>Amount</th></tr></thead>
+                    <tbody>
+                      <t t-foreach="sale_order.order_line" t-as="line">
+                        <tr t-if="not line.display_type">
+                          <td><span t-field="line.name"/></td>
+                          <td>
+                            <span t-field="line.product_uom_qty"/>
+                            <span t-field="line.product_uom" groups="uom.group_uom"/>
+                          </td>
+                          <td><span t-field="line.price_unit" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/></td>
+                          <td><span t-field="line.price_total" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/></td>
+                        </tr>
+                        <tr t-if="line.display_type == 'line_section'">
+                          <td colspan="4"><strong t-field="line.name"/></td>
+                        </tr>
+                        <tr t-if="line.display_type == 'line_note'">
+                          <td colspan="4"><i t-field="line.name"/></td>
+                        </tr>
+                      </t>
+                    </tbody>
+                  </table>
+                  <div class="itl-totals">
+                    <div class="itl-totals-row" t-if="sale_order.amount_tax">
+                      <span>Taxes</span>
+                      <span t-field="sale_order.amount_tax" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+                    </div>
+                    <div class="itl-totals-row itl-totals-total">
+                      <span>Total</span>
+                      <span t-field="sale_order.amount_total" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Savings - dynamic, computed from the three Studio fields on sale.order
+                     (same formula as the Non Profit Proposal template) -->
+                <t t-set="ipx_user_count" t-value="sale_order.x_studio_integer_field_11b_1jul387j9 or 0"/>
+                <t t-set="ipx_monthly_rate" t-value="sale_order.x_studio_monetary_field_2gl_1jul3gsf0 or 0.0"/>
+                <t t-set="ipx_onsite_rate" t-value="sale_order.x_studio_monetary_field_1el_1jul3fpp6 or 0.0"/>
+                <t t-set="ipx_traditional_annual_savings" t-value="(159 - ipx_monthly_rate) * ipx_user_count * 12"/>
+                <t t-set="ipx_modern_annual_savings" t-value="(259 - ipx_monthly_rate) * ipx_user_count * 12"/>
+
+                <div class="savings-clarification">
+                  <h3>These figures are estimated savings - not amounts you pay.</h3>
+                  <p>
+                    The numbers below are not added to your quotation, invoice, or contract total.
+                    They show how much the organization may retain by paying the IPPBX rate instead
+                    of the comparison benchmarks. Only the Commercial Proposal total is payable.
+                  </p>
+                </div>
+
+                <div class="savings-heading">
+                  <div style="font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1f6feb;">Estimated Annual Savings</div>
+                  <h3>Money that may remain in your organization's budget</h3>
+                  <p>Illustrative comparison based on <t t-esc="ipx_user_count"/> users.</p>
+                </div>
+
+                <div class="savings-clear-grid">
+                  <div class="savings-clear-card">
+                    <strong t-esc="'${:,.0f}'.format(ipx_traditional_annual_savings)"/>
+                    <span>Estimated annual savings compared with $159 traditional managed IT</span>
+                  </div>
+                  <div class="savings-clear-card">
+                    <strong t-esc="'${:,.0f}'.format(ipx_modern_annual_savings)"/>
+                    <span>Estimated annual savings compared with a $259 modern workplace</span>
+                  </div>
+                </div>
+
+                <div class="optional-rate-box">
+                  <div>
+                    <h3 style="margin:0 0 6px;">Optional onsite technical support</h3>
+                    <p>Billed only when requested or approved, plus agreed travel time.</p>
+                  </div>
+                  <div class="optional-rate-price">
+                    <strong t-esc="'${:,.2f}/hr'.format(ipx_onsite_rate)"/>
+                    <span>Only when used</span>
+                  </div>
+                </div>
+
+                <!-- Terms & Conditions / Payment terms -->
+                <div class="itl-terms-grid" t-if="sale_order.note or sale_order.payment_term_id">
+                  <div class="itl-terms-box" t-if="sale_order.note">
+                    <h3>Terms &amp; Conditions</h3>
+                    <div t-field="sale_order.note"/>
+                  </div>
+                  <div class="itl-terms-box" t-if="sale_order.payment_term_id">
+                    <h3>Payment Terms</h3>
+                    <p t-field="sale_order.payment_term_id.name"/>
+                  </div>
+                </div>
+
+                <!-- Industry-Specific Responsibility -->
+                <div class="itl-card">
+                  <div class="itl-section-label">Industry-Specific Responsibility</div>
+                  <h2 style="font-size:1.5rem;">Technology supports the organization's obligations - it does not replace them.</h2>
+                  <div class="itl-callout"><p class="itl-muted" style="margin:0;">IPPBX provides technology, security, backup, and continuity services; it does not provide legal advice or guarantee compliance with professional-conduct, privacy, court, client, insurance, or contractual obligations. Final requirements should be validated by firm leadership and counsel.</p></div>
+                </div>
+              </div>
+
+              <!-- CTA / bottom sign actions -->
+              <div t-if="sale_order._has_to_be_signed() or sale_order._has_to_be_paid()" class="itl-cta d-print-none" name="sale_order_actions">
+                <div class="itl-cta-grid">
+                  <div>
+                    <div class="itl-section-label" style="color:var(--itl-cyan)">Odoo Portal Acceptance</div>
+                    <h2 style="font-size:1.5rem;">Review, approve, and sign through Odoo.</h2>
+                    <p>The final quotation lines, taxes, optional products, validity, terms, online signature, and payment requirements are managed through Odoo.</p>
+                  </div>
+                  <div class="d-flex gap-2 flex-wrap">
+                    <t t-if="sale_order._has_to_be_signed()">
+                      <a role="button" class="itl-btn itl-btn-primary" data-bs-toggle="modal" data-bs-target="#modalaccept" href="#"><i class="fa fa-check"/><t t-if="sale_order._has_to_be_paid()"> Sign &amp; Pay</t><t t-else=""> Accept &amp; Sign</t></a>
+                      <a role="button" class="itl-btn itl-btn-secondary" href="#discussion"><i class="fa fa-comment"/> Feedback</a>
+                      <a role="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modaldecline" href="#"> <i class="fa fa-times"/> Reject</a>
+                    </t>
+                    <a t-elif="sale_order._has_to_be_paid()" role="button" data-bs-toggle="modal" data-bs-target="#modalaccept" href="#" t-att-class="'itl-btn %s' % ('itl-btn-secondary' if sale_order.transaction_ids else 'itl-btn-primary')">
+                      <i class="fa fa-check"/> <t t-if="not sale_order.signature">Accept &amp; Pay</t><t t-else="">Pay Now</t>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- chatter -->
+              <div class="itl-card" id="sale_order_communication">
+                <div class="itl-section-label">Discussion</div>
+                <h2 style="font-size:1.5rem;">Communication history</h2>
+                <t t-call="portal.message_thread"/>
+              </div>
+
+              <!-- footer -->
+              <div class="itl-footer d-print-none">
+                <span>Confidential quotation prepared for <t t-esc="sale_order.partner_id.name"/></span>
+                <span t-esc="sale_order.company_id.name"/>
+              </div>
+            </div>
+          </div>
+        </div>
+    </template>
+</odoo>

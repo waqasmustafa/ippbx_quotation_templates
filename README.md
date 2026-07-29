@@ -33,6 +33,7 @@ install this module - just reset it right before installing, not before.
   quotation starts with. They can point at different rows.
 - Dropdown values (in this order): **Default Odoo**, Phone General Proposal, Phone Law
   Proposal, Phone Medical Proposal, Phone Religious Proposal, Phone System AI Calling,
+  IT General Proposal, IT Law Proposal, IT Medical Proposal, IT Religious Proposal,
   IT Non Profit Proposal.
 - `views/template_general_proposal.xml`, `template_law.xml`, `template_medical.xml`,
   `template_religious.xml`, `template_phone_system.xml` - generated from the raw
@@ -43,9 +44,19 @@ install this module - just reset it right before installing, not before.
   `(x_studio_monetary_field_4n_1junkim7e - x_studio_monetary_field_2gl_1jul3gsf0) * 12`
   ("Current Custom Monthly Bill" minus "Monthly rate", both Studio fields on
   sale.order) - same pattern Non Profit Proposal already used for its own numbers.
-- `views/template_modern_digital_workplace.xml` ("Non Profit Proposal" in the
+- `views/template_modern_digital_workplace.xml` ("IT Non Profit Proposal" in the
   dropdown) - the non-profit.xml design, unchanged, including its dynamic
   order-line pricing table. Left as-is per request.
+- `views/template_it_general.xml`, `template_it_law.xml`, `template_it_medical.xml`,
+  `template_it_religious.xml` - a second set of 4 templates, generated from the
+  boss's "IT ..." raw HTML files. Structurally modeled on IT Non Profit Proposal
+  rather than the "Phone" set: same savings-calculation formula (3 Studio fields -
+  `x_studio_integer_field_11b_1jul387j9` user count,
+  `x_studio_monetary_field_2gl_1jul3gsf0` monthly rate,
+  `x_studio_monetary_field_1el_1jul3fpp6` onsite rate - compared against $159/$259
+  per-user benchmarks), same dynamic Products table from `sale_order.order_line`,
+  same sidebar/modals/chatter/footer. Only the marketing content sections (hero,
+  priorities, continuity, workflows, outcomes, disclaimer) differ per vertical.
 - `views/portal_sale_order_switch.xml` - the routing view. Picks the custom
   template via `t-call="#{sale_order.quotation_template_id.view_id.key}"` when
   one is set and not flagged as `is_default`; otherwise falls through to the

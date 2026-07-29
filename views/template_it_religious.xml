@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Standalone portal content template for the "IT Religious Proposal" quotation design.
+        Not inherited from portal.portal_sidebar - it is t-call'd by
+        portal_sale_order_switch.xml when sale_order.quotation_template_id points here.
+
+        Structure and savings-calculation formula follow the Non Profit Proposal
+        template (3 Studio fields: user count, monthly rate, onsite rate; savings
+        compared with $159/$259-per-user benchmarks) per the agreed pattern - only
+        the marketing content sections differ per vertical, sourced from the
+        boss's "IT IT Religious Proposal.html" file.
+    -->
+    <template id="quotation_template_content_it_religious" name="Quotation Portal - IT Religious Proposal">
+        <style>
+
+        .itr-quote {
+          --itr-navy: #071a2f; --itr-navy2: #0b2b50; --itr-accent: #7856a8; --itr-accent-soft: #f1ebf8;
+          --itr-cyan: #43c8f2; --itr-green: #32b980; --itr-ink: #172338; --itr-muted: #617086;
+          --itr-line: #dbe5ee; --itr-soft: #f4f8fc; --itr-shadow: 0 18px 52px rgba(7,26,47,.10);
+          font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+          color: var(--itr-ink);
+        }
+        .itr-quote h1, .itr-quote h2, .itr-quote h3, .itr-quote h4 { margin-top: 0; line-height: 1.15; letter-spacing: -.035em; }
+        .itr-muted { color: var(--itr-muted); }
+
+        .itr-hero {
+          position: relative; overflow: hidden; color: #fff;
+          padding: 48px 40px; margin-bottom: 28px; border-radius: 24px;
+          background: radial-gradient(circle at 80% 15%, rgba(120,86,168,.20), transparent 28%),
+                      radial-gradient(circle at 15% 15%, rgba(31,111,235,.20), transparent 28%),
+                      linear-gradient(145deg, #061426, #0b2b50 65%, #071a2f);
+        }
+        .itr-hero-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 36px; align-items: center; }
+        .itr-eyebrow {
+          display: inline-flex; align-items: center; gap: 9px; padding: 8px 12px;
+          border: 1px solid rgba(67,200,242,.30); border-radius: 999px;
+          background: rgba(255,255,255,.06); color: #c8efff; font-size: .8rem;
+          font-weight: 850; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 18px;
+        }
+        .itr-eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--itr-cyan); box-shadow: 0 0 16px var(--itr-cyan); }
+        .itr-hero h1 { font-size: clamp(1.9rem, 3.4vw, 2.9rem); margin-bottom: 14px; }
+        .itr-hero .itr-lead { color: #d8e5f0; font-size: 1.05rem; max-width: 620px; }
+        .itr-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+
+        .itr-btn {
+          display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+          min-height: 46px; padding: 0 18px; border-radius: 12px; font-weight: 850;
+          border: 1px solid transparent; transition: .2s ease; cursor: pointer;
+        }
+        .itr-btn-primary { color: #fff !important; background: linear-gradient(135deg, var(--itr-accent), #0b2b50) !important; box-shadow: 0 12px 28px rgba(0,0,0,.20); border-color: transparent !important; }
+        .itr-btn-secondary, .itr-btn-light { color: #fff !important; border-color: rgba(255,255,255,.22) !important; background: rgba(255,255,255,.06) !important; }
+        .itr-btn:hover { transform: translateY(-2px); }
+
+        .itr-proposal-card {
+          padding: 26px; border-radius: 20px; border: 1px solid rgba(255,255,255,.14);
+          background: rgba(4,17,31,.58); box-shadow: 0 20px 60px rgba(0,0,0,.18);
+        }
+        .itr-proposal-card h3 { color: #fff; margin-bottom: 16px; font-size: 1.15rem; }
+        .itr-proposal-meta { display: grid; gap: 10px; }
+        .itr-proposal-meta > div { padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,.06); }
+        .itr-proposal-meta span { display: block; color: #9fb7c9; font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 800; }
+        .itr-proposal-meta strong { display: block; color: #fff; margin-top: 4px; }
+        [data-id="total_amount"] { display: inline-flex !important; align-items: baseline; gap: 2px; white-space: nowrap; }
+        [data-id="total_amount"] * { display: inline !important; }
+
+        .itr-section-label { color: var(--itr-accent); font-size: .78rem; font-weight: 900; letter-spacing: .10em; text-transform: uppercase; margin-bottom: 8px; }
+
+        .itr-card { padding: 28px; border-radius: 20px; background: #fff; border: 1px solid var(--itr-line); box-shadow: 0 12px 38px rgba(7,26,47,.06); margin-bottom: 24px; }
+        .itr-intro-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: start; }
+        .itr-callout { padding: 26px; border-radius: 20px; border: 1px solid var(--itr-line); background: linear-gradient(145deg, var(--itr-accent-soft), #ffffff); box-shadow: 0 14px 40px rgba(7,26,47,.05); }
+        .itr-callout strong { display: block; font-size: 1.2rem; margin-bottom: 8px; }
+
+        .itr-priority-grid, .itr-workflow-grid, .itr-apps-grid, .itr-metrics-grid,
+        .itr-service-grid, .itr-outcome-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 10px; }
+        .itr-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: var(--itr-accent-soft); color: var(--itr-accent); font-weight: 950; margin-bottom: 14px; }
+        .itr-inner-card { padding: 24px; border-radius: 18px; background: #fff; border: 1px solid var(--itr-line); }
+        .itr-inner-card p { color: var(--itr-muted); margin-bottom: 0; }
+
+        .itr-phone-stack { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 10px; }
+        .itr-phone-card { padding: 22px; border-radius: 17px; border: 1px solid var(--itr-line); background: linear-gradient(155deg,#fff,#f7fafd); }
+        .itr-phone-card span { display: inline-flex; padding: 6px 9px; border-radius: 999px; background: var(--itr-accent-soft); color: var(--itr-accent); font-size: .72rem; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 12px; }
+        .itr-phone-card p { color: var(--itr-muted); font-size: .89rem; margin-bottom: 0; }
+
+        .itr-dark-block { color: #fff; border-radius: 22px; padding: 34px; margin-bottom: 24px; background: linear-gradient(145deg, var(--itr-navy), var(--itr-navy2)); }
+        .itr-dark-block .itr-section-label { color: var(--itr-cyan); }
+        .itr-connection-flow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 20px; }
+        .itr-connection-flow div { padding: 14px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.06); text-align: center; font-size: .8rem; font-weight: 800; }
+
+        .itr-workflow-card { padding: 22px; border-radius: 17px; border: 1px solid var(--itr-line); background: linear-gradient(155deg,#fff,#f7fafd); }
+        .itr-workflow-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+        .itr-workflow-card p { color: var(--itr-muted); font-size: .89rem; margin: 0; }
+
+        .itr-safe-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 22px; margin-top: 10px; }
+        .itr-safe-quote { padding: 26px; border-radius: 20px; color: #fff; background: linear-gradient(145deg, var(--itr-navy), var(--itr-navy2)); }
+        .itr-safe-quote strong { display: block; font-size: 1.4rem; line-height: 1.2; margin-bottom: 10px; }
+        .itr-safe-quote p { color: #c7d9e7; margin-bottom: 0; }
+        .itr-safe-controls { display: grid; gap: 10px; }
+        .itr-safe-control { padding: 16px 18px; border-radius: 14px; border: 1px solid var(--itr-line); background: #fff; }
+        .itr-safe-control strong { display: block; margin-bottom: 4px; }
+        .itr-safe-control p { color: var(--itr-muted); margin-bottom: 0; font-size: .87rem; }
+
+        .itr-app-card { min-height: 150px; padding: 20px; border-radius: 16px; border: 1px solid var(--itr-line); background: linear-gradient(155deg,#fff,#f7fafd); }
+        .itr-app-card h4 { font-size: .96rem; margin-bottom: 6px; letter-spacing: -.02em; }
+        .itr-app-card p { color: var(--itr-muted); font-size: .84rem; margin-bottom: 0; }
+
+        .itr-service-card { min-height: 150px; padding: 20px; border-radius: 16px; border: 1px solid var(--itr-line); background: linear-gradient(155deg,#fff,#f7fafd); }
+        .itr-service-card h4 { font-size: .96rem; margin-bottom: 6px; letter-spacing: -.02em; }
+        .itr-service-card p { color: var(--itr-muted); font-size: .84rem; margin-bottom: 0; }
+
+        .itr-outcome-card { padding: 22px; border-radius: 16px; border: 1px solid var(--itr-line); background: #fff; }
+        .itr-outcome-card strong { display: block; color: var(--itr-accent); font-size: 1.05rem; margin-bottom: 6px; }
+        .itr-outcome-card p { color: var(--itr-muted); margin: 0; font-size: .89rem; }
+
+        .itr-experience-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 10px; }
+        .itr-experience-card { padding: 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.06); }
+        .itr-experience-card span { display: block; color: var(--itr-cyan); font-size: .74rem; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+        .itr-experience-card p { color: #c2d5e4; margin: 0; font-size: .88rem; }
+
+        .itr-phase-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 10px; }
+        .itr-phase-card { padding: 18px; border-radius: 16px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
+        .itr-phase-card span { display: block; color: var(--itr-cyan); font-size: .76rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+        .itr-phase-card p { color: #bed0df; margin: 4px 0 0; font-size: .86rem; }
+
+        .itr-metric-card { padding: 20px; border-radius: 16px; border: 1px solid var(--itr-line); background: #fff; }
+        .itr-metric-card strong { display: block; font-size: .95rem; margin-bottom: 5px; }
+        .itr-metric-card p { color: var(--itr-muted); font-size: .84rem; margin: 0; }
+
+        .itr-pricing-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid var(--itr-line); border-radius: 18px; box-shadow: 0 12px 40px rgba(7,26,47,.05); margin-top: 20px; }
+        .itr-pricing-table th, .itr-pricing-table td { padding: 16px 18px; border-bottom: 1px solid var(--itr-line); text-align: left; vertical-align: top; }
+        .itr-pricing-table th { background: var(--itr-accent-soft); color: var(--itr-navy); }
+        .itr-pricing-table tr:last-child td { border-bottom: none; }
+        .itr-pricing-table td:last-child { font-weight: 850; }
+        .itr-native-note { padding: 20px; border-radius: 16px; border: 1px solid var(--itr-line); background: linear-gradient(145deg, var(--itr-accent-soft), #fff); color: var(--itr-muted); margin-bottom: 6px; }
+        .itr-native-note strong { color: var(--itr-ink); }
+        .itr-totals { margin-top: 18px; display: grid; gap: 6px; max-width: 320px; margin-left: auto; }
+        .itr-totals-row { display: flex; justify-content: space-between; padding: 8px 0; }
+        .itr-totals-row span { color: var(--itr-ink) !important; }
+        .itr-totals-total { font-weight: 900; font-size: 1.2rem; border-top: 1px solid var(--itr-line); padding-top: 12px; }
+        .itr-totals-total span { color: var(--itr-navy) !important; }
+
+        .itr-savings-clarification { margin-top: 22px; padding: 22px 24px; border-radius: 18px; border: 1px solid #bfe4d3; background: linear-gradient(145deg,#effbf6,#fff); }
+        .itr-savings-clarification h3 { margin: 0 0 6px; color: #115f43 !important; font-size: 1.1rem; }
+        .itr-savings-clarification p { margin: 0; color: var(--itr-muted) !important; }
+        .itr-savings { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 16px; }
+        .itr-savings-card { padding: 22px; border-radius: 16px; border: 1px solid #bfe4d3; background: #fff; text-align: center; }
+        .itr-savings-card strong { display: block; color: #126243 !important; font-size: 1.8rem; margin-bottom: 8px; }
+        .itr-savings-card span { display: block; color: var(--itr-ink) !important; font-size: .9rem; font-weight: 800; }
+        .itr-savings-card small { display: block; margin-top: 10px; padding: 9px; background: #f2f8f5; color: var(--itr-muted) !important; border-radius: 10px; }
+        .itr-optional-note { margin-top: 16px; padding: 18px 20px; border-radius: 15px; border: 1px solid var(--itr-line); background: #f8fafc; color: var(--itr-muted); }
+        .itr-optional-note strong { color: var(--itr-ink); }
+
+        .itr-cta { color: #fff; border-radius: 24px; padding: 40px; margin: 8px 0 24px; background: radial-gradient(circle at 80% 25%, rgba(120,86,168,.20), transparent 28%), linear-gradient(145deg, #071a2f, #0b3159); }
+        .itr-cta-grid { display: grid; grid-template-columns: 1fr auto; gap: 26px; align-items: center; }
+        .itr-cta p { color: #c6d7e5; max-width: 640px; margin: 10px 0 0; }
+
+        .itr-footer { background: #04111f; color: #9db3c4; padding: 22px 26px; font-size: .86rem; border-radius: 18px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+        .itr-quote #sale_order_portal_sidebar {
+          color: #fff;
+          background: radial-gradient(circle at 85% 10%, rgba(120,86,168,.20), transparent 32%), linear-gradient(150deg, var(--itr-navy), var(--itr-navy2));
+          border-radius: 22px; border: 1px solid rgba(255,255,255,.12); box-shadow: var(--itr-shadow); padding: 8px;
+        }
+        .itr-side-total-label { display: block; text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; font-weight: 800; color: #9fb7c9; margin-bottom: 4px; }
+        .itr-side-total-amount { color: #fff; font-size: 2rem; font-weight: 900; }
+        .itr-advantage { padding: 13px 15px; border-radius: 12px; background: rgba(255,255,255,.06); }
+        .itr-advantage-total { color: var(--itr-cyan); }
+        .itr-contact-card { color: #fff; }
+        .itr-contact-card .itr-muted { color: #9fb7c9; }
+
+        /* The live site's theme forces its own text colors on p/h1-h4/span with enough
+           specificity to beat inherited color, so text on our white cards is forced
+           back to ink here (same fix used on the Modern Digital Workplace template). */
+        .itr-card h1, .itr-card h2, .itr-card h3, .itr-card h4,
+        .itr-inner-card h3, .itr-inner-card h4,
+        .itr-phone-card h3, .itr-workflow-card h3, .itr-app-card h4, .itr-safe-control strong, .itr-metric-card strong {
+          color: var(--itr-ink) !important;
+        }
+        .itr-card p:not(.itr-muted), .itr-card div:not(.itr-muted):not(.itr-icon), .itr-card span:not(.itr-muted):not(.itr-badge),
+        .itr-card strong, .itr-card b, .itr-card ul:not(.itr-muted),
+        .itr-inner-card p:not(.itr-muted), .itr-phone-card p:not(.itr-muted), .itr-workflow-card p:not(.itr-muted),
+        .itr-app-card p:not(.itr-muted), .itr-safe-control p:not(.itr-muted), .itr-metric-card p:not(.itr-muted) {
+          color: var(--itr-ink) !important;
+        }
+        .itr-muted { color: var(--itr-muted) !important; }
+        .itr-pricing-table th { color: var(--itr-navy) !important; }
+        .itr-pricing-table td { color: var(--itr-ink) !important; }
+
+        /* .itr-safe-quote is a dark navy block nested inside the light .itr-card
+           "Keep What Works" section, so the ink-forcing rules above catch it too -
+           restore its light text here with higher specificity to win back. */
+        .itr-quote .itr-card .itr-safe-quote,
+        .itr-quote .itr-card .itr-safe-quote strong {
+          color: #fff !important;
+        }
+        .itr-quote .itr-card .itr-safe-quote p {
+          color: #c7d9e7 !important;
+        }
+        /* Same issue for .itr-outcome-card strong - restore its accent color
+           over the generic ink-forcing rule above. */
+        .itr-quote .itr-card .itr-outcome-card strong {
+          color: var(--itr-accent) !important;
+        }
+
+        @media (max-width: 950px) {
+          .itr-hero-grid, .itr-cta-grid, .itr-intro-grid, .itr-safe-grid { grid-template-columns: 1fr; }
+          .itr-priority-grid, .itr-workflow-grid, .itr-apps-grid, .itr-metrics-grid,
+          .itr-phone-stack, .itr-experience-grid, .itr-connection-flow, .itr-phase-grid,
+          .itr-service-grid, .itr-outcome-grid { grid-template-columns: 1fr 1fr; }
+        }
+        /* True phone widths: the 2-column fallback above is still too
+           cramped (cards clipped/overlapping) - drop to a single column. */
+        @media (max-width: 640px) {
+          .itr-priority-grid, .itr-workflow-grid, .itr-apps-grid, .itr-metrics-grid,
+          .itr-phone-stack, .itr-experience-grid, .itr-connection-flow, .itr-phase-grid,
+          .itr-service-grid, .itr-outcome-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+
+        /* Savings clarification block - green "not a charge" styling.
+           Matches the Non Profit Proposal template's own (unprefixed) classes -
+           safe to leave unprefixed since each template's style block only ever
+           renders alongside its own body. */
+        .savings-clarification { margin-top: 30px; padding: 25px 28px; border-radius: 20px; border: 1px solid #bfe4d3; background: linear-gradient(145deg,#effbf6,#fff); }
+        .savings-clarification h3 { margin: 0 0 7px; color: #115f43 !important; }
+        .savings-clarification p { margin: 0; color: #617086 !important; }
+        .savings-heading { text-align: center; margin-top: 30px; }
+        .savings-heading h3 { margin: 5px 0; color: var(--itr-navy) !important; }
+        .savings-heading p { color: var(--itr-muted) !important; }
+        .savings-clear-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 22px; }
+        .savings-clear-card { padding: 26px; border: 1px solid #bfe4d3; border-radius: 18px; text-align: center; background: #fff; }
+        .savings-clear-card::before {
+          content: "ESTIMATED SAVINGS - NOT A CHARGE"; display: inline-flex; padding: 6px 10px; margin-bottom: 14px;
+          border-radius: 999px; background: #e7f8f1; color: #126243; font-size: 11px; font-weight: 800;
+        }
+        .savings-clear-card strong { display: block; font-size: 34px; color: #126243 !important; margin-bottom: 9px; }
+        .savings-clear-card span { display: block; font-weight: 700; color: var(--itr-ink) !important; }
+        .optional-rate-box {
+          display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; margin: 18px 0 24px;
+          padding: 22px; border: 1px solid #d3dfeb; border-radius: 17px; background: #f8fafc;
+        }
+        .optional-rate-box h3 { color: var(--itr-ink) !important; }
+        .optional-rate-box p { margin: 0; color: var(--itr-muted) !important; }
+        .optional-rate-price { padding: 15px 20px; border: 1px solid var(--itr-line); background: #fff; border-radius: 13px; text-align: center; }
+        .optional-rate-price strong { display: block; font-size: 27px; color: var(--itr-ink) !important; }
+        .optional-rate-price span { font-size: 11px; text-transform: uppercase; color: var(--itr-muted) !important; font-weight: 800; }
+        @media (max-width: 700px) {
+          .savings-clear-grid, .optional-rate-box { grid-template-columns: 1fr; }
+        }
+        </style>
+
+        <div class="itr-quote">
+
+          <!-- Hero -->
+          <div class="itr-hero">
+            <div class="itr-hero-grid">
+              <div>
+                <span class="itr-eyebrow">Religious &amp; Faith-Based IT Proposal</span>
+                <h1>Protect the Mission. Simplify the Technology Behind It.</h1>
+                <p class="itr-lead">A modern digital workplace for churches, synagogues, mosques, temples, ministries, and faith-based organizations—built around stewardship, staff and volunteer support, donor information, events, and continuity.</p>
+                <div class="itr-hero-actions">
+                  <a class="itr-btn itr-btn-primary" href="#pricing">Review the Investment</a>
+                  <a class="itr-btn itr-btn-secondary" href="#continuity">See the Safe Transition</a>
+                </div>
+              </div>
+              <aside class="itr-proposal-card">
+                <h3>Proposal Overview</h3>
+                <div class="itr-proposal-meta">
+                  <div><span>Prepared for</span><strong t-field="sale_order.partner_id.name"/></div>
+                  <div><span>Prepared by</span><strong t-field="sale_order.company_id.name"/></div>
+                  <div><span>Date</span><strong t-field="sale_order.date_order" t-options="{'widget': 'date'}"/></div>
+                  <div t-if="sale_order.validity_date"><span>Expiration Date</span><strong t-field="sale_order.validity_date"/></div>
+                  <div t-if="'plan_id' in sale_order._fields and sale_order.plan_id"><span>Plan</span><strong t-field="sale_order.plan_id.name"/></div>
+                  <div><span>Your contact</span><strong t-field="sale_order.user_id.name"/></div>
+                </div>
+              </aside>
+            </div>
+          </div>
+
+          <!-- Executive Summary -->
+          <div class="itr-card">
+            <div class="itr-intro-grid">
+              <div>
+                <div class="itr-section-label">Executive Summary</div>
+                <h2 style="font-size:1.7rem;">A workplace designed around the work that matters most</h2>
+                <p>Religious organizations often support a complex mix of clergy, employees, volunteers, programs, facilities, donors, members, events, livestreams, and community services—sometimes across several locations.</p>
+                <p class="itr-muted">Technology may be managed informally until growth, turnover, a security event, or a major program exposes the need for stronger structure.</p>
+                <p class="itr-muted">IPPBX provides one managed workplace for support, secure access, communications, backup, cybersecurity, assets, and continuity—while respecting limited budgets and preserving familiar ministry workflows.</p>
+              </div>
+              <div class="itr-callout">
+                <strong>Every dollar spent on technology should protect more time and resources for the mission.</strong>
+                <p class="itr-muted">IPPBX improves the foundation underneath employee work by connecting support, communications, cybersecurity, backup, assets, continuity, and future AI readiness.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Industry Priorities -->
+          <div class="itr-card">
+            <div class="itr-section-label">Industry Priorities</div>
+            <h2 style="font-size:1.7rem;">What this proposal is designed to protect and improve</h2>
+            <div class="itr-priority-grid">
+              <article class="itr-card" style="margin-bottom:0;"><div class="itr-icon">01</div><h3>Budget Stewardship</h3><p class="itr-muted">Replace fragmented tools and surprise support costs with a more predictable operating model.</p></article>
+              <article class="itr-card" style="margin-bottom:0;"><div class="itr-icon">02</div><h3>Staff &amp; Volunteer Access</h3><p class="itr-muted">Onboard employees, clergy, and approved volunteers with the right access for the right period.</p></article>
+              <article class="itr-card" style="margin-bottom:0;"><div class="itr-icon">03</div><h3>Donor &amp; Member Information</h3><p class="itr-muted">Strengthen access, backup, and employee awareness around sensitive contact and giving information.</p></article>
+              <article class="itr-card" style="margin-bottom:0;"><div class="itr-icon">04</div><h3>Events &amp; Livestreaming</h3><p class="itr-muted">Plan support and continuity for worship services, classes, outreach, seasonal events, and broadcasts.</p></article>
+              <article class="itr-card" style="margin-bottom:0;"><div class="itr-icon">05</div><h3>Multi-Site Collaboration</h3><p class="itr-muted">Give approved teams consistent access to documents, calendars, communications, and applications.</p></article>
+              <article class="itr-card" style="margin-bottom:0;"><div class="itr-icon">06</div><h3>Cybersecurity Awareness</h3><p class="itr-muted">Help staff and volunteers recognize phishing, impersonation, gift-card scams, and account takeover attempts.</p></article>
+            </div>
+          </div>
+
+          <!-- Protect What Already Works / Safe Transition -->
+          <div class="itr-card" id="continuity">
+            <div class="itr-section-label">Protect What Already Works</div>
+            <h2 style="font-size:1.7rem;">Everything works today. The transition is designed to keep it that way.</h2>
+            <p class="itr-muted" style="max-width:900px;">A functioning environment should not be replaced by a risky, organization-wide cutover. IPPBX documents what employees depend on, builds the new environment first, pilots with real users, and moves one controlled group at a time.</p>
+            <div class="itr-safe-grid" style="margin-top:10px;">
+              <div class="itr-safe-quote">
+                <strong>Same work. Same familiar tools. A better foundation underneath.</strong>
+                <p>Where practical, employees continue using email, approved donor or member systems, accounting tools, calendars, shared files, phone extensions, voicemail, livestream and event workflows, printers, and the daily processes staff and volunteers already understand. The first improvements happen in delivery, support, monitoring, backup, access control, and recovery.</p>
+              </div>
+              <div class="itr-safe-controls">
+                <div class="itr-safe-control"><strong>Document before changing</strong><p>Inventory applications, files, devices, printers, communications, access, and critical workflows.</p></div>
+                <div class="itr-safe-control"><strong>Build before moving</strong><p>Prepare and validate the workplace before a department is asked to depend on it.</p></div>
+                <div class="itr-safe-control"><strong>Pilot with real employees</strong><p>Test normal daily work - not merely whether the technology turns on.</p></div>
+                <div class="itr-safe-control"><strong>Move department by department</strong><p>No "big bang" migration. Each group moves after agreed requirements are validated.</p></div>
+                <div class="itr-safe-control"><strong>Support visible changes</strong><p>Explain MFA, secure sign-in, or other necessary changes in advance and support employees during launch.</p></div>
+              </div>
+            </div>
+            <div class="itr-optional-note" style="margin-top:18px;"><strong>Honest expectation:</strong> some security improvements may be visible. The objective is minimal disruption and no surprises - not a promise that necessary safeguards will remain invisible.</div>
+          </div>
+
+          <!-- Industry Workflows -->
+          <div class="itr-card">
+            <div class="itr-section-label">Industry Workflows</div>
+            <h2 style="font-size:1.7rem;">Technology aligned with how the organization actually operates</h2>
+            <div class="itr-workflow-grid">
+              <article class="itr-workflow-card"><h3>Member &amp; Donor Systems</h3><p>Support approved CRM, giving, membership, communications, and engagement platforms.</p></article>
+              <article class="itr-workflow-card"><h3>Finance &amp; Stewardship</h3><p>Protect access to accounting, payroll, budgeting, donation, and financial-reporting systems.</p></article>
+              <article class="itr-workflow-card"><h3>Worship &amp; Events</h3><p>Plan technology continuity for services, special events, classes, community programs, and seasonal activity.</p></article>
+              <article class="itr-workflow-card"><h3>Livestream &amp; Media</h3><p>Track and support approved production, streaming, presentation, and media devices.</p></article>
+              <article class="itr-workflow-card"><h3>Staff &amp; Volunteer Turnover</h3><p>Create repeatable onboarding and offboarding so access does not remain after a role ends.</p></article>
+              <article class="itr-workflow-card"><h3>Multi-Site &amp; Remote Work</h3><p>Give authorized staff and ministry leaders a consistent workplace from approved locations.</p></article>
+            </div>
+          </div>
+
+          <!-- Implementation Approach -->
+          <div class="itr-dark-block">
+            <div class="itr-section-label">Implementation Approach</div>
+            <h2 style="font-size:1.6rem;">A controlled transition with evidence at every step</h2>
+            <div class="itr-phase-grid">
+              <article class="itr-phase-card"><span>Phase 1</span><h3 style="font-size:1rem;color:#fff;">Discovery</h3><p>Review users, devices, applications, data, communications, security, vendors, support history, and risks.</p></article>
+              <article class="itr-phase-card"><span>Phase 2</span><h3 style="font-size:1rem;color:#fff;">Design</h3><p>Define user profiles, access, applications, storage, security, backup, documentation, and rollout safeguards.</p></article>
+              <article class="itr-phase-card"><span>Phase 3</span><h3 style="font-size:1rem;color:#fff;">Pilot</h3><p>Test representative employees completing real daily work. No broader group moves until the pilot is validated.</p></article>
+              <article class="itr-phase-card"><span>Phase 4</span><h3 style="font-size:1rem;color:#fff;">Rollout</h3><p>Move controlled groups with advance communication, support, validation, and post-migration follow-up.</p></article>
+              <article class="itr-phase-card"><span>Phase 5</span><h3 style="font-size:1rem;color:#fff;">Optimize</h3><p>Review support, security, backup, assets, employee feedback, lifecycle priorities, and future automation opportunities.</p></article>
+            </div>
+          </div>
+
+          <!-- Included Managed Services -->
+          <div class="itr-card">
+            <div class="itr-section-label">Included Managed Services</div>
+            <h2 style="font-size:1.7rem;">Support, security, backup, planning, and continuity in one operating program</h2>
+            <div class="itr-service-grid">
+              <article class="itr-service-card"><h4>Secure Digital Workplace</h4><p>Managed employee workspace, identity, application delivery, file access, remote work, and standard user profiles.</p></article>
+              <article class="itr-service-card"><h4>Employee Help Desk</h4><p>Login, access, application, onboarding, offboarding, password, phone, voicemail, and escalation support.</p></article>
+              <article class="itr-service-card"><h4>IPPBX Communications</h4><p>Extension creation, voicemail, phone onboarding, documentation, routing support, and employee assistance.</p></article>
+              <article class="itr-service-card"><h4>Managed SOC Services</h4><p>Centralized monitoring, alert review, investigation support, incident oversight, and meaningful escalation.</p></article>
+              <article class="itr-service-card"><h4>Behavioral MDR</h4><p>Behavior-based detection and managed response designed to identify suspicious activity beyond basic antivirus.</p></article>
+              <article class="itr-service-card"><h4>Phishing &amp; Awareness</h4><p>Managed simulations, education, follow-up, participation reporting, and risk-trend visibility.</p></article>
+              <article class="itr-service-card"><h4>Google Workspace Backup</h4><p>Managed backup for Gmail, Drive, Chat, Calendar, and Contacts beyond native retention options.</p></article>
+              <article class="itr-service-card"><h4>Asset Management</h4><p>Track devices, assigned users, ownership, status, age, warranty information, and replacement needs.</p></article>
+              <article class="itr-service-card"><h4>Roadmapping &amp; Lifecycle</h4><p>Plan replacements, renewals, upgrades, priorities, and budget needs before they become emergencies.</p></article>
+              <article class="itr-service-card"><h4>Security Reporting</h4><p>Leadership-ready visibility into security activity, posture, improvements, risks, and open recommendations.</p></article>
+              <article class="itr-service-card"><h4>Business Continuity &amp; DR</h4><p>Document recovery priorities, backup coordination, critical systems, responsibilities, and restoration procedures.</p></article>
+              <article class="itr-service-card"><h4>AI-Ready Foundation</h4><p>Organize identity, systems, information, permissions, and workflows for responsible future automation.</p></article>
+            </div>
+          </div>
+
+          <!-- Expected Outcomes -->
+          <div class="itr-card">
+            <div class="itr-section-label">Expected Outcomes</div>
+            <h2 style="font-size:1.7rem;">What success should look like after rollout</h2>
+            <div class="itr-outcome-grid">
+              <article class="itr-outcome-card"><strong>Predictable support</strong><p>Leadership sees a clearer monthly operating model instead of disconnected invoices and emergency work.</p></article>
+              <article class="itr-outcome-card"><strong>Simpler access</strong><p>Staff and approved volunteers receive role-based access without uncontrolled shared passwords.</p></article>
+              <article class="itr-outcome-card"><strong>Protected information</strong><p>Backup and security monitoring strengthen protection for email, files, contacts, calendars, and giving data.</p></article>
+              <article class="itr-outcome-card"><strong>Safer employees</strong><p>Training helps teams recognize fraud, impersonation, malicious links, and account attacks.</p></article>
+              <article class="itr-outcome-card"><strong>Event continuity</strong><p>Important services and events receive documented support and recovery priorities.</p></article>
+              <article class="itr-outcome-card"><strong>More mission focus</strong><p>Less staff time is lost to repetitive technology problems and avoidable disruptions.</p></article>
+            </div>
+          </div>
+
+          <div class="row o_portal_sale_sidebar">
+            <!-- Sidebar (sticky - required for Sign &amp; Pay / navspy to keep working) -->
+            <t t-call="portal.portal_record_sidebar" id="sale_order_portal_sidebar">
+              <t t-set="classes" t-value="'col-lg-4 col-xxl-3 d-print-none'"/>
+
+              <t t-set="title">
+                <span class="itr-side-total-label">Total</span>
+                <h2 t-field="sale_order.amount_total" data-id="total_amount" class="itr-side-total-amount mb-0 text-break"/>
+              </t>
+
+              <t t-set="entries">
+                <div class="d-flex flex-column gap-4 mt-3">
+                  <div class="d-flex flex-column gap-2" id="sale_order_sidebar_button">
+                    <a t-if="sale_order._has_to_be_signed()" role="button" class="btn itr-btn itr-btn-primary" data-bs-toggle="modal" data-bs-target="#modalaccept" href="#">
+                      <i class="fa fa-check"/><t t-if="sale_order._has_to_be_paid()"> Sign &amp; Pay</t><t t-else=""> Accept &amp; Sign</t>
+                    </a>
+                    <a t-elif="sale_order._has_to_be_paid()" role="button" id="o_sale_portal_paynow" data-bs-toggle="modal" data-bs-target="#modalaccept" href="#" t-att-class="'btn itr-btn %s' % ('itr-btn-light' if sale_order.transaction_ids else 'itr-btn-primary')">
+                      <i class="fa fa-check"/> <t t-if="not sale_order.signature">Accept &amp; Pay</t><t t-else="">Pay Now</t>
+                    </a>
+                    <div class="o_download_pdf d-flex gap-2 flex-lg-column flex-xl-row flex-wrap">
+                      <a class="btn itr-btn itr-btn-light o_print_btn o_portal_invoice_print flex-grow-1" t-att-href="sale_order.get_portal_url(report_type='pdf')" id="print_invoice_report" title="View Details" role="button" target="_blank"><i class="fa fa-print me-1"/>View Details</a>
+                    </div>
+                  </div>
+
+                  <t t-if="not sale_order.is_expired and sale_order.state in ['draft', 'sent']">
+                    <div t-if="sale_order.amount_undiscounted - sale_order.amount_untaxed &gt; 0.01" class="itr-advantage" name="sale_order_advantage">
+                      <small><b class="itr-muted">Your advantage</b></small>
+                      <small>
+                        <b t-field="sale_order.amount_undiscounted" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: sale_order.currency_id}" style="text-decoration: line-through" class="d-block mt-1" data-id="amount_undiscounted"/>
+                      </small>
+                      <t t-if="sale_order.amount_untaxed == sale_order.amount_total">
+                        <h4 t-field="sale_order.amount_total" class="itr-advantage-total" data-id="total_amount"/>
+                      </t>
+                      <t t-else="">
+                        <h4 t-field="sale_order.amount_untaxed" class="itr-advantage-total mb-0" data-id="total_untaxed"/>
+                        <small>(<span t-field="sale_order.amount_total" data-id="total_amount"/> Incl. tax)</small>
+                      </t>
+                    </div>
+                  </t>
+
+                  <div t-if="sale_order.user_id" class="itr-contact-card">
+                    <h6><small class="itr-muted">Your contact</small></h6>
+                    <t t-call="portal.portal_my_contact">
+                      <t t-set="_contactAvatar" t-value="image_data_uri(sale_order.user_id.avatar_128)"/>
+                      <t t-set="_contactName" t-value="sale_order.user_id.name"/>
+                      <t t-set="_contactLink" t-value="True"/>
+                    </t>
+                  </div>
+                </div>
+              </t>
+            </t>
+
+            <!-- Page content -->
+            <div id="quote_content" class="col-12 col-lg-8 col-xxl-9 mt-5 mt-lg-0">
+
+              <!-- modal relative to the actions sign and pay (unchanged from stock Odoo) -->
+              <div role="dialog" class="modal fade" id="modalaccept" name="sale_order_modal_sign_and_pay">
+                <div class="modal-dialog" t-if="sale_order._has_to_be_signed()">
+                  <form id="accept" method="POST" t-att-data-order-id="sale_order.id" t-att-data-token="sale_order.access_token" class="js_accept_json modal-content js_website_submit_form">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <header class="modal-header">
+                      <h4 class="modal-title">Validate Order</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                    </header>
+                    <main class="modal-body" id="sign-dialog">
+                      <span>
+                        By signing, you confirm acceptance on behalf of
+                        <b t-field="sale_order.partner_id.commercial_partner_id"/>
+                        for the <b data-id="total_amount" t-field="sale_order.amount_total"/> quote.
+                      </span>
+                      <b t-if="sale_order.payment_term_id" t-field="sale_order.payment_term_id.note"/>
+                      <t t-call="portal.signature_form">
+                        <t t-set="call_url" t-value="sale_order.get_portal_url(suffix='/accept')"/>
+                        <t t-set="default_name" t-value="sale_order.partner_id.name"/>
+                      </t>
+                    </main>
+                  </form>
+                </div>
+
+                <div class="modal-dialog" t-if="not sale_order._has_to_be_signed() and sale_order._has_to_be_paid()" name="sale_order_modal_validate">
+                  <div class="modal-content">
+                    <header class="modal-header">
+                      <h4 class="modal-title">Validate Order</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                    </header>
+                    <main class="modal-body" id="sign-dialog">
+                      <t t-set="prepayment_amount" t-value="sale_order._get_prepayment_required_amount()"/>
+                      <t t-set="prepayment_available" t-value="sale_order.prepayment_percent and sale_order.prepayment_percent != 1.0"/>
+                      <div t-if="prepayment_available" id="o_sale_portal_prepayment_buttons" class="d-flex btn-group mb-3" role="group">
+                        <button name="o_sale_portal_amount_prepayment_button" class="btn btn-light active">
+                          Down payment <br/>
+                          <span t-esc="prepayment_amount" class="fw-bold" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+                        </button>
+                        <button name="o_sale_portal_amount_total_button" class="btn btn-light">
+                          Full amount <br/>
+                          <span class="fw-bold" t-field="sale_order.amount_total"/>
+                        </button>
+                      </div>
+                      <div class="mb-3">
+                        <span t-if="prepayment_available">
+                          <span id="o_sale_portal_use_amount_prepayment">
+                            By paying a <u>down payment</u> of
+                            <span t-esc="prepayment_amount" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}" class="fw-bold"/>
+                            (<b t-esc="sale_order.prepayment_percent * 100"/>%),
+                          </span>
+                          <span id="o_sale_portal_use_amount_total">
+                            By paying,
+                          </span>
+                        </span>
+                        <span t-else="">
+                          By paying,
+                        </span>
+                        you confirm acceptance on the behalf of <b t-field="sale_order.partner_id.commercial_partner_id"/>
+                        for the <b data-id="total_amount" t-field="sale_order.amount_total"/> quote.
+                        <b t-if="sale_order.payment_term_id" t-field="sale_order.payment_term_id.note" class="o_sale_payment_terms"/>
+                      </div>
+                      <div t-if="company_mismatch">
+                        <t t-call="payment.company_mismatch_warning"/>
+                      </div>
+                      <div t-elif="not sale_order._has_to_be_paid()" class="alert alert-danger">
+                        The order is not in a state requiring customer payment.
+                      </div>
+                      <div t-else="" id="payment_method" class="text-start mt-0">
+                        <t t-call="payment.form">
+                          <t t-set="sale_order_id" t-value="sale_order.id"/>
+                        </t>
+                      </div>
+                    </main>
+                  </div>
+                </div>
+              </div>
+
+              <div role="dialog" class="modal fade" id="modaldecline">
+                <div class="modal-dialog">
+                  <form id="decline" method="POST" t-attf-action="/my/orders/#{sale_order.id}/decline?access_token=#{sale_order.access_token}" class="modal-content">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <header class="modal-header">
+                      <h4 class="modal-title">Reject This Quotation</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                    </header>
+                    <main class="modal-body">
+                      <p>Tell us why you are refusing this quotation, this will help us improve our services.</p>
+                      <textarea rows="4" name="decline_message" required="" placeholder="Your feedback..." class="form-control"/>
+                    </main>
+                    <footer class="modal-footer">
+                      <button type="submit" t-att-id="sale_order.id" class="btn btn-danger"><i class="fa fa-times"/> Reject</button>
+                      <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                    </footer>
+                  </form>
+                </div>
+              </div>
+
+              <!-- status messages (unchanged from stock Odoo) -->
+              <div t-if="message == 'sign_ok'" class="alert alert-success alert-dismissible d-print-none" role="status">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
+                <strong>Thank You!</strong><br/>
+                <t t-if="message == 'sign_ok' and sale_order.state == 'sale'">Your order has been confirmed.</t>
+                <t t-elif="message == 'sign_ok' and sale_order._has_to_be_paid()">Your order has been signed but still needs to be paid to be confirmed.</t>
+                <t t-else="">Your order has been signed.</t>
+              </div>
+              <div t-if="message == 'cant_reject'" class="alert alert-danger alert-dismissible d-print-none" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
+                Your order is not in a state to be rejected.
+              </div>
+              <t t-if="sale_order.get_portal_last_transaction()">
+                <t t-call="payment.state_header">
+                  <t t-set="tx" t-value="sale_order.get_portal_last_transaction()"/>
+                </t>
+              </t>
+              <div t-if="sale_order.state == 'cancel'" class="alert alert-danger alert-dismissible d-print-none" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"/>
+                <strong>This quotation has been cancelled.</strong> <a role="button" href="#discussion"><i class="fa fa-comment"/> Contact us to get a new quotation.</a>
+              </div>
+              <div t-if="sale_order.is_expired" class="alert alert-warning alert-dismissible d-print-none" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"/>
+                <strong>This offer expired!</strong> <a role="button" href="#discussion"><i class="fa fa-comment"/> Contact us to get a new quotation.</a>
+              </div>
+
+              <div t-attf-class="#{'pb-5' if report_type == 'html' else ''}" id="portal_sale_content">
+
+                <!-- Billing Details -->
+                <div class="itr-card">
+                  <div class="itr-section-label">Billing Details</div>
+                  <h2 style="font-size:1.5rem;">Invoicing and Shipping Address</h2>
+                  <div t-field="sale_order.partner_invoice_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone'], 'no_marker': True}"/>
+                </div>
+
+                <!-- Products (dynamic - sale_order.order_line) -->
+                <div class="itr-card" id="pricing">
+                  <div class="itr-section-label">Commercial Proposal</div>
+                  <h2 style="font-size:1.5rem;">Products</h2>
+                  <table class="itr-pricing-table">
+                    <thead><tr><th>Products</th><th>Quantity</th><th>Unit Price</th><th>Amount</th></tr></thead>
+                    <tbody>
+                      <t t-foreach="sale_order.order_line" t-as="line">
+                        <tr t-if="not line.display_type">
+                          <td><span t-field="line.name"/></td>
+                          <td>
+                            <span t-field="line.product_uom_qty"/>
+                            <span t-field="line.product_uom" groups="uom.group_uom"/>
+                          </td>
+                          <td><span t-field="line.price_unit" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/></td>
+                          <td><span t-field="line.price_total" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/></td>
+                        </tr>
+                        <tr t-if="line.display_type == 'line_section'">
+                          <td colspan="4"><strong t-field="line.name"/></td>
+                        </tr>
+                        <tr t-if="line.display_type == 'line_note'">
+                          <td colspan="4"><i t-field="line.name"/></td>
+                        </tr>
+                      </t>
+                    </tbody>
+                  </table>
+                  <div class="itr-totals">
+                    <div class="itr-totals-row" t-if="sale_order.amount_tax">
+                      <span>Taxes</span>
+                      <span t-field="sale_order.amount_tax" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+                    </div>
+                    <div class="itr-totals-row itr-totals-total">
+                      <span>Total</span>
+                      <span t-field="sale_order.amount_total" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Savings - dynamic, computed from the three Studio fields on sale.order
+                     (same formula as the Non Profit Proposal template) -->
+                <t t-set="ipx_user_count" t-value="sale_order.x_studio_integer_field_11b_1jul387j9 or 0"/>
+                <t t-set="ipx_monthly_rate" t-value="sale_order.x_studio_monetary_field_2gl_1jul3gsf0 or 0.0"/>
+                <t t-set="ipx_onsite_rate" t-value="sale_order.x_studio_monetary_field_1el_1jul3fpp6 or 0.0"/>
+                <t t-set="ipx_traditional_annual_savings" t-value="(159 - ipx_monthly_rate) * ipx_user_count * 12"/>
+                <t t-set="ipx_modern_annual_savings" t-value="(259 - ipx_monthly_rate) * ipx_user_count * 12"/>
+
+                <div class="savings-clarification">
+                  <h3>These figures are estimated savings - not amounts you pay.</h3>
+                  <p>
+                    The numbers below are not added to your quotation, invoice, or contract total.
+                    They show how much the organization may retain by paying the IPPBX rate instead
+                    of the comparison benchmarks. Only the Commercial Proposal total is payable.
+                  </p>
+                </div>
+
+                <div class="savings-heading">
+                  <div style="font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1f6feb;">Estimated Annual Savings</div>
+                  <h3>Money that may remain in your organization's budget</h3>
+                  <p>Illustrative comparison based on <t t-esc="ipx_user_count"/> users.</p>
+                </div>
+
+                <div class="savings-clear-grid">
+                  <div class="savings-clear-card">
+                    <strong t-esc="'${:,.0f}'.format(ipx_traditional_annual_savings)"/>
+                    <span>Estimated annual savings compared with $159 traditional managed IT</span>
+                  </div>
+                  <div class="savings-clear-card">
+                    <strong t-esc="'${:,.0f}'.format(ipx_modern_annual_savings)"/>
+                    <span>Estimated annual savings compared with a $259 modern workplace</span>
+                  </div>
+                </div>
+
+                <div class="optional-rate-box">
+                  <div>
+                    <h3 style="margin:0 0 6px;">Optional onsite technical support</h3>
+                    <p>Billed only when requested or approved, plus agreed travel time.</p>
+                  </div>
+                  <div class="optional-rate-price">
+                    <strong t-esc="'${:,.2f}/hr'.format(ipx_onsite_rate)"/>
+                    <span>Only when used</span>
+                  </div>
+                </div>
+
+                <!-- Terms & Conditions / Payment terms -->
+                <div class="itr-terms-grid" t-if="sale_order.note or sale_order.payment_term_id">
+                  <div class="itr-terms-box" t-if="sale_order.note">
+                    <h3>Terms &amp; Conditions</h3>
+                    <div t-field="sale_order.note"/>
+                  </div>
+                  <div class="itr-terms-box" t-if="sale_order.payment_term_id">
+                    <h3>Payment Terms</h3>
+                    <p t-field="sale_order.payment_term_id.name"/>
+                  </div>
+                </div>
+
+                <!-- Industry-Specific Responsibility -->
+                <div class="itr-card">
+                  <div class="itr-section-label">Industry-Specific Responsibility</div>
+                  <h2 style="font-size:1.5rem;">Technology supports the organization's obligations - it does not replace them.</h2>
+                  <div class="itr-callout"><p class="itr-muted" style="margin:0;">Security and continuity requirements vary by organization, payment process, childcare program, counseling activity, jurisdiction, and data type. The final design should reflect the organization's policies, insurance requirements, legal advice, and applicable obligations.</p></div>
+                </div>
+              </div>
+
+              <!-- CTA / bottom sign actions -->
+              <div t-if="sale_order._has_to_be_signed() or sale_order._has_to_be_paid()" class="itr-cta d-print-none" name="sale_order_actions">
+                <div class="itr-cta-grid">
+                  <div>
+                    <div class="itr-section-label" style="color:var(--itr-cyan)">Odoo Portal Acceptance</div>
+                    <h2 style="font-size:1.5rem;">Review, approve, and sign through Odoo.</h2>
+                    <p>The final quotation lines, taxes, optional products, validity, terms, online signature, and payment requirements are managed through Odoo.</p>
+                  </div>
+                  <div class="d-flex gap-2 flex-wrap">
+                    <t t-if="sale_order._has_to_be_signed()">
+                      <a role="button" class="itr-btn itr-btn-primary" data-bs-toggle="modal" data-bs-target="#modalaccept" href="#"><i class="fa fa-check"/><t t-if="sale_order._has_to_be_paid()"> Sign &amp; Pay</t><t t-else=""> Accept &amp; Sign</t></a>
+                      <a role="button" class="itr-btn itr-btn-secondary" href="#discussion"><i class="fa fa-comment"/> Feedback</a>
+                      <a role="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modaldecline" href="#"> <i class="fa fa-times"/> Reject</a>
+                    </t>
+                    <a t-elif="sale_order._has_to_be_paid()" role="button" data-bs-toggle="modal" data-bs-target="#modalaccept" href="#" t-att-class="'itr-btn %s' % ('itr-btn-secondary' if sale_order.transaction_ids else 'itr-btn-primary')">
+                      <i class="fa fa-check"/> <t t-if="not sale_order.signature">Accept &amp; Pay</t><t t-else="">Pay Now</t>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- chatter -->
+              <div class="itr-card" id="sale_order_communication">
+                <div class="itr-section-label">Discussion</div>
+                <h2 style="font-size:1.5rem;">Communication history</h2>
+                <t t-call="portal.message_thread"/>
+              </div>
+
+              <!-- footer -->
+              <div class="itr-footer d-print-none">
+                <span>Confidential quotation prepared for <t t-esc="sale_order.partner_id.name"/></span>
+                <span t-esc="sale_order.company_id.name"/>
+              </div>
+            </div>
+          </div>
+        </div>
+    </template>
+</odoo>

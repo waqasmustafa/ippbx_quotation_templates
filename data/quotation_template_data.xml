@@ -43,6 +43,34 @@
         <field name="sequence">50</field>
     </record>
 
+    <record id="quotation_template_it_general" model="quotation.template">
+        <field name="name">IT General Proposal</field>
+        <field name="code">it_general</field>
+        <field name="view_id" ref="quotation_template_content_it_general"/>
+        <field name="sequence">55</field>
+    </record>
+
+    <record id="quotation_template_it_law" model="quotation.template">
+        <field name="name">IT Law Proposal</field>
+        <field name="code">it_law</field>
+        <field name="view_id" ref="quotation_template_content_it_law"/>
+        <field name="sequence">56</field>
+    </record>
+
+    <record id="quotation_template_it_medical" model="quotation.template">
+        <field name="name">IT Medical Proposal</field>
+        <field name="code">it_medical</field>
+        <field name="view_id" ref="quotation_template_content_it_medical"/>
+        <field name="sequence">57</field>
+    </record>
+
+    <record id="quotation_template_it_religious" model="quotation.template">
+        <field name="name">IT Religious Proposal</field>
+        <field name="code">it_religious</field>
+        <field name="view_id" ref="quotation_template_content_it_religious"/>
+        <field name="sequence">58</field>
+    </record>
+
     <!-- PROVISIONAL: is_default_selection marks what NEW quotations get by
          default. Set here to IT Non Profit Proposal to match current live
          behaviour (see chat) - flip this flag in the UI, or ask to change it,
