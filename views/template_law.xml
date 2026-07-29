@@ -597,7 +597,7 @@
                     <p>The organization pays the Odoo quotation total above. Comparison figures illustrate how much may remain in the budget versus current or benchmark phone spending.</p>
                   </div>
                   <div class="law-savings">
-                    <div class="law-savings-card"><strong t-esc="'${:,.0f}'.format(ipx_annual_savings)"/><span>Estimated annual phone-service savings compared with the organization's current recurring cost</span><small><t t-esc="'${:,.2f}'.format(ipx_current_monthly)"/> current − <t t-esc="'${:,.2f}'.format(ipx_ippbx_monthly)"/> IPPBX) x 12 months</small></div>
+                    <div class="law-savings-card"><strong t-esc="'${:,.0f}'.format(ipx_annual_savings)"/><span>Estimated annual phone-service savings compared with the organization's current recurring cost</span></div>
                     <div class="law-savings-card"><strong>90 Days</strong><span>Complete AI Workforce access included with the phone plan during the introductory experience</span><small>Afterward, continue only the individual applications, bundles, or complete platform selected in Odoo.</small></div>
                   </div>
 
