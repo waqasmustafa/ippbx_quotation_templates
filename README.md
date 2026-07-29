@@ -31,9 +31,9 @@ install this module - just reset it right before installing, not before.
   row that means "render the genuine stock Odoo layout" (used by the routing
   view's fallback branch); `is_default_selection` marks which row a brand-new
   quotation starts with. They can point at different rows.
-- Dropdown values (in this order): **Default Odoo**, General Proposal, Law
-  Proposal, Medical Proposal, Religious Proposal, Phone System, Non Profit
-  Proposal.
+- Dropdown values (in this order): **Default Odoo**, Phone General Proposal, Phone Law
+  Proposal, Phone Medical Proposal, Phone Religious Proposal, Phone System AI Calling,
+  IT Non Profit Proposal.
 - `views/template_general_proposal.xml`, `template_law.xml`, `template_medical.xml`,
   `template_religious.xml`, `template_phone_system.xml` - generated from the raw
   HTML proposals. Everything is dynamic now, bound to the real `sale_order`:
