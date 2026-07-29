@@ -401,7 +401,7 @@
                         <div><span>Proposal</span><strong t-field="sale_order.name"/></div>
                         <div><span>Prepared by</span><strong t-field="sale_order.user_id.name"/></div>
                         <div t-if="sale_order.validity_date"><span>Valid until</span><strong t-field="sale_order.validity_date"/></div>
-                        <div><span>Total</span><strong t-field="sale_order.amount_total" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/></div>
+                        <div><span>Total</span><strong t-field="sale_order.amount_total" data-id="total_amount" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/></div>
                       </div>
                     </aside>
                   </div>
