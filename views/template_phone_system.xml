@@ -176,6 +176,17 @@
         .ph-pricing-table th { color: var(--ph-navy) !important; }
         .ph-pricing-table td { color: var(--ph-ink) !important; }
 
+        /* .ph-safe-quote is a dark navy block nested inside the light .ph-card
+           "Keep What Works" section, so the ink-forcing rules above catch it too -
+           restore its light text here with higher specificity to win back. */
+        .ph-quote .ph-card .ph-safe-quote,
+        .ph-quote .ph-card .ph-safe-quote strong {
+          color: #fff !important;
+        }
+        .ph-quote .ph-card .ph-safe-quote p {
+          color: #c7d9e7 !important;
+        }
+
         @media (max-width: 950px) {
           .ph-hero-grid, .ph-cta-grid, .ph-intro-grid, .ph-safe-grid { grid-template-columns: 1fr; }
           .ph-priority-grid, .ph-workflow-grid, .ph-apps-grid, .ph-metrics-grid,

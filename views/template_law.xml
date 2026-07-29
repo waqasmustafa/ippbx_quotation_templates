@@ -176,6 +176,17 @@
         .law-pricing-table th { color: var(--law-navy) !important; }
         .law-pricing-table td { color: var(--law-ink) !important; }
 
+        /* .law-safe-quote is a dark navy block nested inside the light .law-card
+           "Keep What Works" section, so the ink-forcing rules above catch it too -
+           restore its light text here with higher specificity to win back. */
+        .law-quote .law-card .law-safe-quote,
+        .law-quote .law-card .law-safe-quote strong {
+          color: #fff !important;
+        }
+        .law-quote .law-card .law-safe-quote p {
+          color: #c7d9e7 !important;
+        }
+
         @media (max-width: 950px) {
           .law-hero-grid, .law-cta-grid, .law-intro-grid, .law-safe-grid { grid-template-columns: 1fr; }
           .law-priority-grid, .law-workflow-grid, .law-apps-grid, .law-metrics-grid,

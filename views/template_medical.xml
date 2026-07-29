@@ -176,6 +176,17 @@
         .med-pricing-table th { color: var(--med-navy) !important; }
         .med-pricing-table td { color: var(--med-ink) !important; }
 
+        /* .med-safe-quote is a dark navy block nested inside the light .med-card
+           "Keep What Works" section, so the ink-forcing rules above catch it too -
+           restore its light text here with higher specificity to win back. */
+        .med-quote .med-card .med-safe-quote,
+        .med-quote .med-card .med-safe-quote strong {
+          color: #fff !important;
+        }
+        .med-quote .med-card .med-safe-quote p {
+          color: #c7d9e7 !important;
+        }
+
         @media (max-width: 950px) {
           .med-hero-grid, .med-cta-grid, .med-intro-grid, .med-safe-grid { grid-template-columns: 1fr; }
           .med-priority-grid, .med-workflow-grid, .med-apps-grid, .med-metrics-grid,

@@ -176,6 +176,17 @@
         .rel-pricing-table th { color: var(--rel-navy) !important; }
         .rel-pricing-table td { color: var(--rel-ink) !important; }
 
+        /* .rel-safe-quote is a dark navy block nested inside the light .rel-card
+           "Keep What Works" section, so the ink-forcing rules above catch it too -
+           restore its light text here with higher specificity to win back. */
+        .rel-quote .rel-card .rel-safe-quote,
+        .rel-quote .rel-card .rel-safe-quote strong {
+          color: #fff !important;
+        }
+        .rel-quote .rel-card .rel-safe-quote p {
+          color: #c7d9e7 !important;
+        }
+
         @media (max-width: 950px) {
           .rel-hero-grid, .rel-cta-grid, .rel-intro-grid, .rel-safe-grid { grid-template-columns: 1fr; }
           .rel-priority-grid, .rel-workflow-grid, .rel-apps-grid, .rel-metrics-grid,

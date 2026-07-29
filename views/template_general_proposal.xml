@@ -176,6 +176,17 @@
         .gp-pricing-table th { color: var(--gp-navy) !important; }
         .gp-pricing-table td { color: var(--gp-ink) !important; }
 
+        /* .gp-safe-quote is a dark navy block nested inside the light .gp-card
+           "Keep What Works" section, so the ink-forcing rules above catch it too -
+           restore its light text here with higher specificity to win back. */
+        .gp-quote .gp-card .gp-safe-quote,
+        .gp-quote .gp-card .gp-safe-quote strong {
+          color: #fff !important;
+        }
+        .gp-quote .gp-card .gp-safe-quote p {
+          color: #c7d9e7 !important;
+        }
+
         @media (max-width: 950px) {
           .gp-hero-grid, .gp-cta-grid, .gp-intro-grid, .gp-safe-grid { grid-template-columns: 1fr; }
           .gp-priority-grid, .gp-workflow-grid, .gp-apps-grid, .gp-metrics-grid,
