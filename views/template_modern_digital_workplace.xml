@@ -1,0 +1,927 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Standalone portal content template for the "Modern Digital Workplace"
+        quotation design (this is the design that used to live directly on
+        sale.sale_order_portal_template as a hand-edit - see portal_sale_order_switch.xml).
+        Not inherited from portal.portal_sidebar - it is t-call'd by
+        portal_sale_order_switch.xml when sale_order.quotation_template_id points here.
+        Content/behaviour is otherwise unchanged from the original non-profit.xml.
+    -->
+    <template id="quotation_template_content_modern_digital_workplace" name="Quotation Portal - Modern Digital Workplace">
+        <style>
+        .ipx-quote {
+          --ipx-navy: #071a2f;
+          --ipx-navy2: #0b2b50;
+          --ipx-blue: #1f6feb;
+          --ipx-cyan: #43c8f2;
+          --ipx-green: #32b980;
+          --ipx-ink: #172338;
+          --ipx-muted: #617086;
+          --ipx-line: #dbe5ee;
+          --ipx-soft: #f4f8fc;
+          --ipx-shadow: 0 18px 52px rgba(7, 26, 47, .10);
+          font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+          color: var(--ipx-ink);
+        }
+        .ipx-quote h1, .ipx-quote h2, .ipx-quote h3, .ipx-quote h4 { margin-top: 0; line-height: 1.15; letter-spacing: -.035em; }
+        .ipx-muted { color: var(--ipx-muted); }
+
+        /* Hero band - full width, matches .hero in the reference HTML */
+        .ipx-hero {
+          position: relative; overflow: hidden; color: #fff;
+          padding: 48px 40px; margin-bottom: 28px; border-radius: 24px;
+          background:
+            radial-gradient(circle at 80% 15%, rgba(67,200,242,.20), transparent 28%),
+            radial-gradient(circle at 15% 15%, rgba(31,111,235,.23), transparent 28%),
+            linear-gradient(145deg, #061426, #0b2b50 65%, #071a2f);
+        }
+        .ipx-hero-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 36px; align-items: center; }
+        .ipx-eyebrow {
+          display: inline-flex; align-items: center; gap: 9px; padding: 8px 12px;
+          border: 1px solid rgba(67,200,242,.30); border-radius: 999px;
+          background: rgba(255,255,255,.06); color: #c8efff; font-size: .8rem;
+          font-weight: 850; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 18px;
+        }
+        .ipx-eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ipx-cyan); box-shadow: 0 0 16px var(--ipx-cyan); }
+        .ipx-hero h1 { font-size: clamp(1.9rem, 3.4vw, 2.9rem); margin-bottom: 14px; }
+        .ipx-hero .ipx-lead { color: #d8e5f0; font-size: 1.05rem; max-width: 620px; }
+        .ipx-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+
+        .ipx-btn {
+          display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+          min-height: 46px; padding: 0 18px; border-radius: 12px; font-weight: 850;
+          border: 1px solid transparent; transition: .2s ease; cursor: pointer;
+        }
+        .ipx-btn-primary { color: #fff !important; background: linear-gradient(135deg, var(--ipx-blue), #1556ba) !important; box-shadow: 0 12px 28px rgba(31,111,235,.28); border-color: transparent !important; }
+        .ipx-btn-secondary, .ipx-btn-light { color: #fff !important; border-color: rgba(255,255,255,.22) !important; background: rgba(255,255,255,.06) !important; }
+        .ipx-btn:hover { transform: translateY(-2px); }
+
+        .ipx-proposal-card {
+          padding: 26px; border-radius: 20px; border: 1px solid rgba(255,255,255,.14);
+          background: rgba(4,17,31,.58); box-shadow: 0 20px 60px rgba(0,0,0,.18);
+        }
+        .ipx-proposal-card h3 { color: #fff; margin-bottom: 16px; font-size: 1.15rem; }
+        .ipx-proposal-meta { display: grid; gap: 10px; }
+        .ipx-proposal-meta &gt; div { padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,.06); }
+        .ipx-proposal-meta span { display: block; color: #9fb7c9; font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 800; }
+        .ipx-proposal-meta strong { display: block; color: #fff; margin-top: 4px; }
+        /* The monetary widget renders the currency symbol and the number as separate
+           spans, and the site's global CSS forces spans to display:block - which starts
+           a new line no matter what white-space is set on the parent. A flex container
+           lays its children out in a row regardless of each child's own display value,
+           so that's what reliably keeps "$" and "100.00" on one line. */
+        [data-id="total_amount"] {
+          display: inline-flex !important;
+          align-items: baseline;
+          gap: 2px;
+          white-space: nowrap;
+        }
+        [data-id="total_amount"] * { display: inline !important; }
+        .ipx-proposal-meta strong[data-id="total_amount"] { font-size: 1.4rem; }
+
+        .ipx-section-label { color: var(--ipx-blue); font-size: .78rem; font-weight: 900; letter-spacing: .10em; text-transform: uppercase; margin-bottom: 8px; }
+
+        .ipx-card {
+          padding: 28px; border-radius: 20px; background: #fff;
+          border: 1px solid var(--ipx-line); box-shadow: 0 12px 38px rgba(7,26,47,.06);
+          margin-bottom: 24px;
+        }
+
+        .ipx-badge {
+          display: inline-flex; padding: 6px 10px; border-radius: 999px; font-size: .72rem;
+          font-weight: 900; letter-spacing: .05em; text-transform: uppercase;
+          background: #e8f8f1; color: #126243; margin-bottom: 14px;
+        }
+        .ipx-badge.ipx-badge-warn { background: #fdecd2; color: #8a4b06; }
+        .ipx-badge.ipx-badge-muted { background: #eef2f6; color: #45566b; }
+
+        .ipx-pricing-table {
+          width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden;
+          border: 1px solid var(--ipx-line); border-radius: 18px;
+          box-shadow: 0 12px 40px rgba(7,26,47,.05);
+        }
+        .ipx-pricing-table th, .ipx-pricing-table td { padding: 16px 18px; border-bottom: 1px solid var(--ipx-line); text-align: left; vertical-align: top; }
+        .ipx-pricing-table th { background: #eaf2fb; color: var(--ipx-navy); }
+        .ipx-pricing-table tr:last-child td { border-bottom: none; }
+        .ipx-pricing-table td:last-child { font-weight: 850; }
+
+        .ipx-totals { margin-top: 18px; display: grid; gap: 6px; max-width: 320px; margin-left: auto; }
+        .ipx-totals-row { display: flex; justify-content: space-between; padding: 8px 0; }
+        .ipx-totals-total { font-weight: 900; font-size: 1.2rem; border-top: 1px solid var(--ipx-line); padding-top: 12px; color: var(--ipx-navy); }
+
+        .ipx-callout {
+          padding: 26px; border-radius: 20px; border: 1px solid #cfe1f1;
+          background: linear-gradient(145deg, #edf6ff, #ffffff); box-shadow: 0 14px 40px rgba(7,26,47,.05);
+        }
+        .ipx-callout strong { display: block; font-size: 1.2rem; margin-bottom: 8px; }
+
+        .ipx-terms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 24px; }
+        .ipx-terms-box { padding: 26px; border-radius: 18px; border: 1px solid var(--ipx-line); background: #fff; }
+        .ipx-terms-box h3 { font-size: 1.15rem; margin-bottom: 12px; }
+
+        .ipx-cta {
+          color: #fff; border-radius: 24px; padding: 40px; margin: 8px 0 24px;
+          background: radial-gradient(circle at 80% 25%, rgba(67,200,242,.20), transparent 28%),
+                      linear-gradient(145deg, #071a2f, #0b3159);
+        }
+        .ipx-cta-grid { display: grid; grid-template-columns: 1fr auto; gap: 26px; align-items: center; }
+        .ipx-cta p { color: #c6d7e5; max-width: 640px; margin: 10px 0 0; }
+
+        .ipx-footer {
+          background: #04111f; color: #9db3c4; padding: 22px 26px; font-size: .86rem;
+          border-radius: 18px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+        }
+
+        /* Sidebar */
+        .ipx-quote #sale_order_portal_sidebar {
+          color: #fff;
+          background: radial-gradient(circle at 85% 10%, rgba(67,200,242,.20), transparent 32%),
+                      linear-gradient(150deg, var(--ipx-navy), var(--ipx-navy2));
+          border-radius: 22px; border: 1px solid rgba(255,255,255,.12);
+          box-shadow: var(--ipx-shadow); padding: 8px;
+        }
+        .ipx-side-total-label { display: block; text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; font-weight: 800; color: #9fb7c9; margin-bottom: 4px; }
+        .ipx-side-total-amount { color: #fff; font-size: 2rem; font-weight: 900; }
+        .ipx-meta-list { display: grid; gap: 10px; }
+        .ipx-meta-item { padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,.06); }
+        .ipx-meta-label { display: block; color: #9fb7c9; font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 800; }
+        .ipx-meta-value { display: block; color: #fff; margin-top: 3px; }
+        .ipx-advantage { padding: 13px 15px; border-radius: 12px; background: rgba(255,255,255,.06); }
+        .ipx-advantage-total { color: var(--ipx-cyan); }
+        .ipx-contact-card { color: #fff; }
+        .ipx-contact-card .ipx-muted { color: #9fb7c9; }
+
+        .ipx-intro-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: start; }
+        .ipx-priority-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 10px; }
+        .ipx-icon {
+          width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px;
+          background: #eaf3ff; color: var(--ipx-blue); font-weight: 950; margin-bottom: 14px;
+        }
+        .ipx-journey { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 10px; }
+        .ipx-journey-step { padding: 20px; border-radius: 16px; border: 1px solid var(--ipx-line); background: #fff; }
+        .ipx-journey-step span {
+          display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 9px;
+          background: var(--ipx-blue); color: #fff; font-weight: 900; margin-bottom: 12px;
+        }
+        .ipx-dark-block {
+          color: #fff; border-radius: 22px; padding: 34px; margin-bottom: 24px;
+          background: linear-gradient(145deg, var(--ipx-navy), var(--ipx-navy2));
+        }
+        .ipx-dark-block .ipx-section-label { color: var(--ipx-cyan); }
+        .ipx-phase-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 10px; }
+        .ipx-phase-card { padding: 18px; border-radius: 16px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
+        .ipx-phase-card span {
+          display: block; color: var(--ipx-cyan); font-size: .76rem; font-weight: 900;
+          letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px;
+        }
+        .ipx-phase-card p { color: #bed0df; margin: 4px 0 0; font-size: .86rem; }
+        .ipx-service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 10px; }
+        .ipx-service-card { padding: 20px; border-radius: 16px; border: 1px solid var(--ipx-line); background: linear-gradient(155deg, #fff, #f7fafd); }
+        .ipx-service-card h4 { font-size: .98rem; margin-bottom: 6px; }
+        .ipx-service-card p { color: var(--ipx-muted); font-size: .85rem; margin: 0; }
+
+        .ipx-pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+        .ipx-price-card { position: relative; padding: 26px; border-radius: 20px; border: 1px solid var(--ipx-line); background: #fff; box-shadow: var(--ipx-shadow); }
+        .ipx-price-card.ipx-primary { color: #fff; border-color: rgba(67,200,242,.28); background: linear-gradient(145deg, #071a2f, #0b3159); }
+        .ipx-price-card .ipx-price { display: flex; align-items: flex-end; gap: 8px; margin: 12px 0; }
+        .ipx-price-card .ipx-price strong { font-size: 2.2rem; letter-spacing: -.05em; line-height: .95; color: var(--ipx-navy); }
+        .ipx-price-card.ipx-primary .ipx-price strong { color: #fff; }
+        .ipx-price-card .ipx-price span { color: var(--ipx-muted); font-size: .86rem; padding-bottom: 4px; }
+        .ipx-price-card.ipx-primary .ipx-price span { color: #bfd3e4; }
+        .ipx-price-list { display: grid; gap: 8px; padding: 0; margin: 16px 0 0; list-style: none; }
+        .ipx-price-list li { position: relative; padding-left: 22px; color: var(--ipx-muted); font-size: .88rem; }
+        .ipx-price-list li::before { content: "\2713"; position: absolute; left: 0; color: var(--ipx-green); font-weight: 950; }
+        .ipx-price-card.ipx-primary .ipx-price-list li { color: #e0ecf5; }
+        .ipx-price-card.ipx-primary .ipx-price-list li::before { color: var(--ipx-cyan); }
+        .ipx-savings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 4px; }
+        .ipx-savings-card { padding: 18px; border-radius: 14px; border: 1px solid var(--ipx-line); background: #fff; text-align: center; }
+        .ipx-savings-card strong { display: block; color: var(--ipx-blue); font-size: 1.4rem; margin-bottom: 4px; }
+        .ipx-savings-card span { color: var(--ipx-muted); font-size: .78rem; }
+
+        /* The live site's dark theme forces light/white text on p and h1/h2 site-wide
+           with enough specificity to beat plain inherited color - so text on our white
+           cards renders near-invisible unless forced back to ink here. */
+        .ipx-card h1, .ipx-card h2, .ipx-card h3, .ipx-card h4,
+        .ipx-terms-box h3,
+        .ipx-journey-step h3,
+        .ipx-service-card h4,
+        .ipx-price-card:not(.ipx-primary) h3 {
+          color: var(--ipx-ink) !important;
+        }
+        .ipx-card p:not(.ipx-muted), .ipx-card div:not(.ipx-muted):not(.ipx-icon), .ipx-card span:not(.ipx-muted):not(.ipx-badge),
+        .ipx-card strong, .ipx-card b, .ipx-card ul:not(.ipx-muted),
+        .ipx-terms-box p:not(.ipx-muted), .ipx-terms-box div:not(.ipx-muted), .ipx-terms-box ul:not(.ipx-muted),
+        .ipx-journey-step p:not(.ipx-muted),
+        .ipx-service-card p,
+        .ipx-price-card:not(.ipx-primary) p:not(.ipx-muted) {
+          color: var(--ipx-ink) !important;
+        }
+        .ipx-muted { color: var(--ipx-muted) !important; }
+        /* li text color isn't inherited from the parent ul on this site - the theme
+           sets color directly on li, which always beats an inherited value regardless
+           of !important - so muted lists need their li's targeted explicitly. */
+        .ipx-terms-box ul li, .ipx-card ul.ipx-muted li {
+          color: var(--ipx-muted) !important;
+        }
+        .ipx-pricing-table th { color: var(--ipx-navy) !important; }
+        .ipx-pricing-table td { color: var(--ipx-ink) !important; }
+        .ipx-totals-row span { color: var(--ipx-ink) !important; }
+        .ipx-totals-total { color: var(--ipx-navy) !important; }
+        .ipx-totals-total span { color: var(--ipx-navy) !important; }
+
+        /* .ipx-price-card.ipx-primary sits nested inside the outer white .ipx-card,
+           so the ink-forcing rules above also caught it - restore white/light text
+           here with higher specificity so it wins back over those rules. */
+        .ipx-card .ipx-price-card.ipx-primary,
+        .ipx-card .ipx-price-card.ipx-primary h1, .ipx-card .ipx-price-card.ipx-primary h2,
+        .ipx-card .ipx-price-card.ipx-primary h3, .ipx-card .ipx-price-card.ipx-primary h4,
+        .ipx-card .ipx-price-card.ipx-primary p, .ipx-card .ipx-price-card.ipx-primary div,
+        .ipx-card .ipx-price-card.ipx-primary span, .ipx-card .ipx-price-card.ipx-primary strong,
+        .ipx-card .ipx-price-card.ipx-primary li {
+          color: #fff !important;
+        }
+        .ipx-card .ipx-price-card.ipx-primary .ipx-price span { color: #bfd3e4 !important; }
+        .ipx-card .ipx-price-card.ipx-primary .ipx-price-list li { color: #e0ecf5 !important; }
+        .ipx-card .ipx-price-card.ipx-primary .ipx-badge { color: #04213a !important; }
+
+        @media (max-width: 950px) {
+          .ipx-hero-grid, .ipx-cta-grid, .ipx-terms-grid, .ipx-intro-grid, .ipx-pricing-grid { grid-template-columns: 1fr; }
+          .ipx-priority-grid, .ipx-journey, .ipx-phase-grid, .ipx-service-grid, .ipx-savings { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* Savings clarification block - green "not a charge" styling */
+        .savings-clarification { margin-top: 30px; padding: 25px 28px; border-radius: 20px; border: 1px solid #bfe4d3; background: linear-gradient(145deg,#effbf6,#fff); }
+        .savings-clarification h3 { margin: 0 0 7px; color: #115f43 !important; }
+        .savings-clarification p { margin: 0; color: #617086 !important; }
+        .savings-heading { text-align: center; margin-top: 30px; }
+        .savings-heading h3 { margin: 5px 0; color: #fff !important; }
+        .savings-heading p { color: #bed0df !important; }
+        .savings-clear-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 22px; }
+        .savings-clear-card { padding: 26px; border: 1px solid #bfe4d3; border-radius: 18px; text-align: center; background: #fff; }
+        .savings-clear-card::before {
+          content: "ESTIMATED SAVINGS - NOT A CHARGE"; display: inline-flex; padding: 6px 10px; margin-bottom: 14px;
+          border-radius: 999px; background: #e7f8f1; color: #126243; font-size: 11px; font-weight: 800;
+        }
+        .savings-clear-card strong { display: block; font-size: 34px; color: #126243 !important; margin-bottom: 9px; }
+        .savings-clear-card span { display: block; font-weight: 700; color: var(--ipx-ink) !important; }
+        .savings-clear-card small { display: block; margin-top: 12px; padding: 10px; background: #f2f8f5; color: #617086 !important; border-radius: 10px; }
+        .optional-rate-box {
+          display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; margin: 18px 0 24px;
+          padding: 22px; border: 1px solid #d3dfeb; border-radius: 17px; background: #f8fafc;
+        }
+        .optional-rate-box h3 { color: var(--ipx-ink) !important; }
+        .optional-rate-box p { margin: 0; color: #617086 !important; }
+        .optional-rate-price { padding: 15px 20px; border: 1px solid #dbe5ee; background: #fff; border-radius: 13px; text-align: center; }
+        .optional-rate-price strong { display: block; font-size: 27px; color: var(--ipx-ink) !important; }
+        .optional-rate-price span { font-size: 11px; text-transform: uppercase; color: #617086 !important; font-weight: 800; }
+        @media (max-width: 700px) {
+          .savings-clear-grid, .optional-rate-box { grid-template-columns: 1fr; }
+        }
+      </style>
+
+      <div class="ipx-quote">
+
+        <!-- Hero band: mirrors .hero / .hero-grid / .eyebrow / .proposal-card from the HTML design -->
+        <div class="ipx-hero">
+          <div class="ipx-hero-grid">
+            <div>
+              <span class="ipx-eyebrow">Modern Digital Workplace Proposal</span>
+              <h1>One secure workplace. One support team. One future-ready organization.</h1>
+              <p class="ipx-lead">
+                A customized proposal to modernize employee onboarding, IT support, security,
+                backup, business continuity, communications, and AI readiness for
+                <b t-field="sale_order.partner_id.name"/>.
+              </p>
+              <div class="ipx-hero-actions">
+                <a class="ipx-btn ipx-btn-primary" href="#pricing">Review Pricing</a>
+                <a class="ipx-btn ipx-btn-secondary" href="#solution">Explore the Solution</a>
+              </div>
+            </div>
+
+            <aside class="ipx-proposal-card">
+              <h3>Quotation Overview</h3>
+              <div class="ipx-proposal-meta">
+                <div>
+                  <span>Prepared for</span>
+                  <strong t-field="sale_order.partner_id.name"/>
+                </div>
+                <div>
+                  <span>Prepared by</span>
+                  <strong t-field="sale_order.company_id.name"/>
+                </div>
+                <div>
+                  <span>Date</span>
+                  <strong t-field="sale_order.date_order" t-options="{'widget': 'date'}"/>
+                </div>
+                <!-- ADJUST: replace validity_date if your version/plan model names it differently -->
+                <div t-if="sale_order.validity_date">
+                  <span>Expiration Date</span>
+                  <strong t-field="sale_order.validity_date"/>
+                </div>
+                <!-- ADJUST: plan_id is the Subscriptions-app recurring plan field -->
+                <div t-if="'plan_id' in sale_order._fields and sale_order.plan_id">
+                  <span>Plan</span>
+                  <strong t-field="sale_order.plan_id.name"/>
+                </div>
+                <div>
+                  <span>Your contact</span>
+                  <strong t-field="sale_order.user_id.name"/>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <div class="ipx-card">
+          <div class="ipx-intro-grid">
+            <div>
+              <div class="ipx-section-label">Executive Summary</div>
+              <h2 style="font-size:1.7rem;">The next step in a trusted relationship</h2>
+              <p>
+                Hudson Guild has trusted IPPBX with communications for approximately seven years.
+                This proposal extends that relationship into the broader workplace surrounding those communications.
+              </p>
+              <p class="ipx-muted">
+                Based on the preliminary discussion, Hudson Guild's current technology environment appears to rely heavily
+                on traditional, device-by-device support. Employee onboarding may require hands-on configuration of
+                computers, applications, email, phone extensions, voicemail, shared files, permissions, and other workplace tools.
+              </p>
+              <p class="ipx-muted">
+                IPPBX recommends replacing that fragmented model with a centrally managed Modern Digital Workplace
+                designed to make employee onboarding faster, support more responsive, security more consistent,
+                and the organization better prepared for future automation and AI.
+              </p>
+            </div>
+            <div class="ipx-callout">
+              <strong>Your office should not live inside one laptop.</strong>
+              <p class="ipx-muted">
+                The laptop should become a secure window into the employee's approved workplace:
+                applications, files, communications, permissions, security policies, and support.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hudson Guild Priorities -->
+        <div class="ipx-card">
+          <div class="ipx-section-label">Hudson Guild Priorities</div>
+          <h2 style="font-size:1.7rem;">What this proposal is designed to solve</h2>
+          <div class="ipx-priority-grid">
+            <article class="ipx-card" style="margin-bottom:0;">
+              <div class="ipx-icon">01</div>
+              <h3>Faster onboarding</h3>
+              <p class="ipx-muted">Prepare employee access, applications, Google Workspace, phone, voicemail, and permissions before day one.</p>
+            </article>
+            <article class="ipx-card" style="margin-bottom:0;">
+              <div class="ipx-icon">02</div>
+              <h3>Human support</h3>
+              <p class="ipx-muted">Deliver remote-first assistance without removing onsite support when physical or hands-on work is required.</p>
+            </article>
+            <article class="ipx-card" style="margin-bottom:0;">
+              <div class="ipx-icon">03</div>
+              <h3>Consistent workplace</h3>
+              <p class="ipx-muted">Standardize user profiles, security policies, applications, storage, and support instead of rebuilding every computer separately.</p>
+            </article>
+            <article class="ipx-card" style="margin-bottom:0;">
+              <div class="ipx-icon">04</div>
+              <h3>Cleaner file management</h3>
+              <p class="ipx-muted">Review scattered and duplicated information before migration rather than transferring disorder into a new environment.</p>
+            </article>
+            <article class="ipx-card" style="margin-bottom:0;">
+              <div class="ipx-icon">05</div>
+              <h3>Better continuity</h3>
+              <p class="ipx-muted">Reduce employee dependence on one physical computer and improve recovery when a device fails.</p>
+            </article>
+            <article class="ipx-card" style="margin-bottom:0;">
+              <div class="ipx-icon">06</div>
+              <h3>Future readiness</h3>
+              <p class="ipx-muted">Organize systems, permissions, and workflows now so AI can be introduced responsibly later.</p>
+            </article>
+          </div>
+        </div>
+
+        <!-- Proposed Solution -->
+        <div class="ipx-card" id="solution">
+          <div class="ipx-section-label">Proposed Solution</div>
+          <h2 style="font-size:1.7rem;">IPPBX Modern Digital Workplace</h2>
+          <p class="ipx-muted" style="max-width:760px;">
+            The solution is designed to centralize employee identity, applications, files, communications,
+            security, backup, support, technology assets, and recovery planning inside one managed operating environment.
+          </p>
+          <div class="ipx-journey">
+            <div class="ipx-journey-step">
+              <span>1</span>
+              <h3 style="font-size:1.1rem;">Secure identity</h3>
+              <p class="ipx-muted">Create approved access based on employee role.</p>
+            </div>
+            <div class="ipx-journey-step">
+              <span>2</span>
+              <h3 style="font-size:1.1rem;">Managed workplace</h3>
+              <p class="ipx-muted">Deliver applications, files, communications, and permissions centrally.</p>
+            </div>
+            <div class="ipx-journey-step">
+              <span>3</span>
+              <h3 style="font-size:1.1rem;">Remote-first support</h3>
+              <p class="ipx-muted">Resolve most employee issues without waiting for travel.</p>
+            </div>
+            <div class="ipx-journey-step">
+              <span>4</span>
+              <h3 style="font-size:1.1rem;">Onsite when needed</h3>
+              <p class="ipx-muted">Keep hands-on assistance available for physical work.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Implementation Approach -->
+        <div class="ipx-dark-block">
+          <div class="ipx-section-label">Implementation Approach</div>
+          <h2 style="font-size:1.7rem;">A controlled transition - not a disruptive technology event</h2>
+          <div class="ipx-phase-grid">
+            <article class="ipx-phase-card">
+              <span>Phase 1</span>
+              <h3 style="font-size:1rem;color:#fff;">Discovery</h3>
+              <p>Review users, devices, applications, Google Workspace, storage, security, vendors, and support processes.</p>
+            </article>
+            <article class="ipx-phase-card">
+              <span>Phase 2</span>
+              <h3 style="font-size:1rem;color:#fff;">Design</h3>
+              <p>Define user profiles, access, storage, application delivery, security, backup, and support procedures.</p>
+            </article>
+            <article class="ipx-phase-card">
+              <span>Phase 3</span>
+              <h3 style="font-size:1rem;color:#fff;">Pilot</h3>
+              <p>Test representative employees, common applications, file access, phone tools, printing, and support.</p>
+            </article>
+            <article class="ipx-phase-card">
+              <span>Phase 4</span>
+              <h3 style="font-size:1rem;color:#fff;">Rollout</h3>
+              <p>Migrate employees in controlled groups with documentation, support, and post-migration follow-up.</p>
+            </article>
+            <article class="ipx-phase-card">
+              <span>Phase 5</span>
+              <h3 style="font-size:1rem;color:#fff;">Optimize</h3>
+              <p>Review support issues, security, backup, asset records, user satisfaction, and the technology roadmap.</p>
+            </article>
+          </div>
+        </div>
+
+        <!-- Included Managed Services -->
+        <div class="ipx-card">
+          <div class="ipx-section-label">Included Managed Services</div>
+          <h2 style="font-size:1.7rem;">Security, support, backup, and continuity in one program</h2>
+          <div class="ipx-service-grid">
+            <article class="ipx-service-card"><h4>Secure Digital Workplace</h4><p>Managed cloud workplace, user profiles, application delivery, file access, remote work, and standard storage policy.</p></article>
+            <article class="ipx-service-card"><h4>Employee Help Desk</h4><p>Remote support, login assistance, password help, application access, onboarding, offboarding, and escalation.</p></article>
+            <article class="ipx-service-card"><h4>IPPBX Communications</h4><p>Extension creation, voicemail setup, phone onboarding, documentation, and communications support.</p></article>
+            <article class="ipx-service-card"><h4>Managed SOC Services</h4><p>Centralized monitoring, alert review, investigation support, incident oversight, and escalation.</p></article>
+            <article class="ipx-service-card"><h4>Behavioral MDR</h4><p>Behavior-based detection and managed response beyond conventional signature-based antivirus.</p></article>
+            <article class="ipx-service-card"><h4>Phishing &amp; Awareness</h4><p>Managed simulations, employee education, training follow-up, participation reporting, and risk trends.</p></article>
+            <article class="ipx-service-card"><h4>Google Workspace Backup</h4><p>Backup for Gmail, Drive, Chat, Calendar, and Contacts to strengthen recovery beyond native retention.</p></article>
+            <article class="ipx-service-card"><h4>Asset Management</h4><p>Track devices, ownership, assigned users, lifecycle status, warranty information, and replacement needs.</p></article>
+            <article class="ipx-service-card"><h4>Roadmapping</h4><p>Plan equipment replacements, application renewals, security improvements, and technology priorities.</p></article>
+            <article class="ipx-service-card"><h4>Security Reporting</h4><p>Leadership-ready reporting covering activity, risks, improvements, and areas requiring attention.</p></article>
+            <article class="ipx-service-card"><h4>Business Continuity</h4><p>Recovery planning, backup coordination, critical-system identification, and employee-access recovery procedures.</p></article>
+            <article class="ipx-service-card"><h4>AI-Ready Foundation</h4><p>Organized systems, clearer permissions, and documented workflows for responsible future automation.</p></article>
+          </div>
+        </div>
+
+        <!-- Onsite Support -->
+        <div class="ipx-card">
+          <div class="ipx-intro-grid">
+            <div>
+              <div class="ipx-section-label">Onsite Support</div>
+              <h2 style="font-size:1.7rem;">Hands-on assistance remains available</h2>
+              <p>
+                Most employee support is delivered remotely because it is faster and more efficient.
+                When work is physical, onsite assistance can be scheduled.
+              </p>
+              <p class="ipx-muted">
+                Examples include device deployment, office moves, physical troubleshooting, network and cabling assistance,
+                local equipment installation, specialized equipment, and in-person rollout support.
+              </p>
+            </div>
+            <div class="ipx-callout">
+              <strong>$135 per hour</strong>
+              <p class="ipx-muted">
+                Travel time is billed separately. Hardware, materials, parking, tolls, shipping,
+                and other direct expenses are billed separately when applicable.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row o_portal_sale_sidebar">
+          <!-- Sidebar (sticky - required for Sign &amp; Pay / navspy to keep working) -->
+          <t t-call="portal.portal_record_sidebar" id="sale_order_portal_sidebar">
+            <t t-set="classes" t-value="'col-lg-4 col-xxl-3 d-print-none'"/>
+
+            <t t-set="title">
+              <span class="ipx-side-total-label">Total</span>
+              <h2 t-field="sale_order.amount_total" data-id="total_amount" class="ipx-side-total-amount mb-0 text-break"/>
+            </t>
+
+            <t t-set="entries">
+              <div class="d-flex flex-column gap-4 mt-3">
+                <div class="d-flex flex-column gap-2" id="sale_order_sidebar_button">
+                  <a t-if="sale_order._has_to_be_signed()" role="button" class="btn ipx-btn ipx-btn-primary" data-bs-toggle="modal" data-bs-target="#modalaccept" href="#">
+                    <i class="fa fa-check"/><t t-if="sale_order._has_to_be_paid()"> Sign &amp; Pay</t><t t-else=""> Accept &amp; Sign</t>
+                  </a>
+                  <a t-elif="sale_order._has_to_be_paid()" role="button" id="o_sale_portal_paynow" data-bs-toggle="modal" data-bs-target="#modalaccept" href="#" t-att-class="'btn ipx-btn %s' % ('ipx-btn-light' if sale_order.transaction_ids else 'ipx-btn-primary')">
+                    <i class="fa fa-check"/> <t t-if="not sale_order.signature">Accept &amp; Pay</t><t t-else="">Pay Now</t>
+                  </a>
+                  <div class="o_download_pdf d-flex gap-2 flex-lg-column flex-xl-row flex-wrap">
+                    <a class="btn ipx-btn ipx-btn-light o_print_btn o_portal_invoice_print flex-grow-1" t-att-href="sale_order.get_portal_url(report_type='pdf')" id="print_invoice_report" title="View Details" role="button" target="_blank"><i class="fa fa-print me-1"/>View Details</a>
+                  </div>
+                </div>
+
+                <t t-if="not sale_order.is_expired and sale_order.state in ['draft', 'sent']">
+                  <div t-if="sale_order.amount_undiscounted - sale_order.amount_untaxed &gt; 0.01" class="ipx-advantage" name="sale_order_advantage">
+                    <small><b class="ipx-muted">Your advantage</b></small>
+                    <small>
+                      <b t-field="sale_order.amount_undiscounted" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: sale_order.currency_id}" style="text-decoration: line-through" class="d-block mt-1" data-id="amount_undiscounted"/>
+                    </small>
+                    <t t-if="sale_order.amount_untaxed == sale_order.amount_total">
+                      <h4 t-field="sale_order.amount_total" class="ipx-advantage-total" data-id="total_amount"/>
+                    </t>
+                    <t t-else="">
+                      <h4 t-field="sale_order.amount_untaxed" class="ipx-advantage-total mb-0" data-id="total_untaxed"/>
+                      <small>(<span t-field="sale_order.amount_total" data-id="total_amount"/> Incl. tax)</small>
+                    </t>
+                  </div>
+                </t>
+
+                <div t-if="sale_order.user_id" class="ipx-contact-card">
+                  <h6><small class="ipx-muted">Your contact</small></h6>
+                  <t t-call="portal.portal_my_contact">
+                    <t t-set="_contactAvatar" t-value="image_data_uri(sale_order.user_id.avatar_128)"/>
+                    <t t-set="_contactName" t-value="sale_order.user_id.name"/>
+                    <t t-set="_contactLink" t-value="True"/>
+                  </t>
+                </div>
+              </div>
+            </t>
+          </t>
+
+          <!-- Page content -->
+          <div id="quote_content" class="col-12 col-lg-8 col-xxl-9 mt-5 mt-lg-0">
+
+            <!-- modal relative to the actions sign and pay (unchanged from stock Odoo) -->
+            <div role="dialog" class="modal fade" id="modalaccept" name="sale_order_modal_sign_and_pay">
+              <div class="modal-dialog" t-if="sale_order._has_to_be_signed()">
+                <form id="accept" method="POST" t-att-data-order-id="sale_order.id" t-att-data-token="sale_order.access_token" class="js_accept_json modal-content js_website_submit_form">
+                  <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                  <header class="modal-header">
+                    <h4 class="modal-title">Validate Order</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                  </header>
+                  <main class="modal-body" id="sign-dialog">
+                    <span>
+                      By signing, you confirm acceptance on behalf of
+                      <b t-field="sale_order.partner_id.commercial_partner_id"/>
+                      for the <b data-id="total_amount" t-field="sale_order.amount_total"/> quote.
+                    </span>
+                    <b t-if="sale_order.payment_term_id" t-field="sale_order.payment_term_id.note"/>
+                    <t t-call="portal.signature_form">
+                      <t t-set="call_url" t-value="sale_order.get_portal_url(suffix='/accept')"/>
+                      <t t-set="default_name" t-value="sale_order.partner_id.name"/>
+                    </t>
+                  </main>
+                </form>
+              </div>
+
+              <div class="modal-dialog" t-if="not sale_order._has_to_be_signed() and sale_order._has_to_be_paid()" name="sale_order_modal_validate">
+                <div class="modal-content">
+                  <header class="modal-header">
+                    <h4 class="modal-title">Validate Order</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                  </header>
+                  <main class="modal-body" id="sign-dialog">
+                    <t t-set="prepayment_amount" t-value="sale_order._get_prepayment_required_amount()"/>
+                    <t t-set="prepayment_available" t-value="sale_order.prepayment_percent and sale_order.prepayment_percent != 1.0"/>
+                    <div t-if="prepayment_available" id="o_sale_portal_prepayment_buttons" class="d-flex btn-group mb-3" role="group">
+                      <button name="o_sale_portal_amount_prepayment_button" class="btn btn-light active">
+                        Down payment <br/>
+                        <span t-esc="prepayment_amount" class="fw-bold" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+                      </button>
+                      <button name="o_sale_portal_amount_total_button" class="btn btn-light">
+                        Full amount <br/>
+                        <span class="fw-bold" t-field="sale_order.amount_total"/>
+                      </button>
+                    </div>
+                    <div class="mb-3">
+                      <span t-if="prepayment_available">
+                        <span id="o_sale_portal_use_amount_prepayment">
+                          By paying a <u>down payment</u> of
+                          <span t-esc="prepayment_amount" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}" class="fw-bold"/>
+                          (<b t-esc="sale_order.prepayment_percent * 100"/>%),
+                        </span>
+                        <span id="o_sale_portal_use_amount_total">
+                          By paying,
+                        </span>
+                      </span>
+                      <span t-else="">
+                        By paying,
+                      </span>
+                      you confirm acceptance on the behalf of <b t-field="sale_order.partner_id.commercial_partner_id"/>
+                      for the <b data-id="total_amount" t-field="sale_order.amount_total"/> quote.
+                      <b t-if="sale_order.payment_term_id" t-field="sale_order.payment_term_id.note" class="o_sale_payment_terms"/>
+                    </div>
+                    <div t-if="company_mismatch">
+                      <t t-call="payment.company_mismatch_warning"/>
+                    </div>
+                    <div t-elif="not sale_order._has_to_be_paid()" class="alert alert-danger">
+                      The order is not in a state requiring customer payment.
+                    </div>
+                    <div t-else="" id="payment_method" class="text-start mt-0">
+                      <t t-call="payment.form">
+                        <t t-set="sale_order_id" t-value="sale_order.id"/>
+                      </t>
+                    </div>
+                  </main>
+                </div>
+              </div>
+            </div>
+
+            <!-- modal relative to the action reject (unchanged from stock Odoo) -->
+            <div role="dialog" class="modal fade" id="modaldecline">
+              <div class="modal-dialog">
+                <form id="decline" method="POST" t-attf-action="/my/orders/#{sale_order.id}/decline?access_token=#{sale_order.access_token}" class="modal-content">
+                  <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                  <header class="modal-header">
+                    <h4 class="modal-title">Reject This Quotation</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                  </header>
+                  <main class="modal-body">
+                    <p>Tell us why you are refusing this quotation, this will help us improve our services.</p>
+                    <textarea rows="4" name="decline_message" required="" placeholder="Your feedback..." class="form-control"/>
+                  </main>
+                  <footer class="modal-footer">
+                    <button type="submit" t-att-id="sale_order.id" class="btn btn-danger">
+                      <i class="fa fa-times"/> Reject
+                    </button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                  </footer>
+                </form>
+              </div>
+            </div>
+
+            <!-- status messages (unchanged from stock Odoo) -->
+            <div t-if="message == 'sign_ok'" class="alert alert-success alert-dismissible d-print-none" role="status">
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
+              <strong>Thank You!</strong><br/>
+              <t t-if="message == 'sign_ok' and sale_order.state == 'sale'">Your order has been confirmed.</t>
+              <t t-elif="message == 'sign_ok' and sale_order._has_to_be_paid()">Your order has been signed but still needs to be paid to be confirmed.</t>
+              <t t-else="">Your order has been signed.</t>
+            </div>
+
+            <div t-if="message == 'cant_reject'" class="alert alert-danger alert-dismissible d-print-none" role="alert">
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
+              Your order is not in a state to be rejected.
+            </div>
+
+            <t t-if="sale_order.get_portal_last_transaction()">
+              <t t-call="payment.state_header">
+                <t t-set="tx" t-value="sale_order.get_portal_last_transaction()"/>
+              </t>
+            </t>
+
+            <div t-if="sale_order.state == 'cancel'" class="alert alert-danger alert-dismissible d-print-none" role="alert">
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"/>
+              <strong>This quotation has been cancelled.</strong> <a role="button" href="#discussion"><i class="fa fa-comment"/> Contact us to get a new quotation.</a>
+            </div>
+
+            <div t-if="sale_order.is_expired" class="alert alert-warning alert-dismissible d-print-none" role="alert">
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"/>
+              <strong>This offer expired!</strong> <a role="button" href="#discussion"><i class="fa fa-comment"/> Contact us to get a new quotation.</a>
+            </div>
+
+            <!-- portal_sale_content: kept as an id anchor because other Odoo modules
+                 (subscriptions, pdf quote builder, etc.) attach xpath inheritance to
+                 this exact element - removing it breaks those views at load time. -->
+            <div t-attf-class="#{'pb-5' if report_type == 'html' else ''}" id="portal_sale_content">
+
+              <!-- Invoicing / shipping address -->
+              <div class="ipx-card">
+                <div class="ipx-section-label">Billing Details</div>
+                <h2 style="font-size:1.5rem;">Invoicing and Shipping Address</h2>
+                <div t-field="sale_order.partner_invoice_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone'], 'no_marker': True}"/>
+              </div>
+
+              <!-- Standard Program Reference Pricing (illustrative - actual quote is below) -->
+              <div class="ipx-card" id="pricing">
+                <div class="ipx-section-label">Commercial Proposal</div>
+                <h2 style="font-size:1.5rem;">Predictable monthly pricing with flexible implementation</h2>
+                <p class="ipx-muted" style="margin-bottom:0;">Standard program reference pricing - your actual quoted amount is shown in the Products table below.</p>
+                <div class="ipx-pricing-grid" style="margin-top:20px;">
+                  <article class="ipx-price-card ipx-primary">
+                    <span class="ipx-badge" style="background:var(--ipx-cyan);color:#04213a;">Monthly Managed Service</span>
+                    <h3 style="color:#fff;">IPPBX Modern Digital Workplace</h3>
+                    <div class="ipx-price">
+                      <strong>$99</strong>
+                      <span>per user<br/>per month</span>
+                    </div>
+                    <p style="color:#c8dae8;">Based on standard users under a multi-month agreement.</p>
+                    <ul class="ipx-price-list">
+                      <li>Support, security, backup, continuity, and reporting included</li>
+                      <li>Predictable per-user monthly investment</li>
+                      <li>Scales with headcount</li>
+                    </ul>
+                  </article>
+                  <article class="ipx-price-card">
+                    <span class="ipx-badge">One-Time Implementation</span>
+                    <h3>Discovery, design, migration, and rollout</h3>
+                    <div class="ipx-price">
+                      <strong>$200</strong>
+                      <span>per user<br/>one time</span>
+                    </div>
+                    <p class="ipx-muted">Can be paid once, or divided across the first 12 months.</p>
+                    <ul class="ipx-price-list">
+                      <li>Pay once at implementation</li>
+                      <li>Or divide across the first 12 months</li>
+                      <li>Returns to standard monthly rate after year one</li>
+                    </ul>
+                  </article>
+                </div>
+              </div>
+
+              <!-- Products (your actual quotation) -->
+              <div class="ipx-card" id="products">
+                <div class="ipx-section-label">Commercial Proposal</div>
+                <h2 style="font-size:1.5rem;">Products</h2>
+                <table class="ipx-pricing-table">
+                  <thead>
+                    <tr>
+                      <th>Products</th>
+                      <th>Quantity</th>
+                      <th>Unit Price</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <t t-foreach="sale_order.order_line" t-as="line">
+                      <tr t-if="not line.display_type">
+                        <td><span t-field="line.name"/></td>
+                        <td>
+                          <span t-field="line.product_uom_qty"/>
+                          <span t-field="line.product_uom" groups="uom.group_uom"/>
+                        </td>
+                        <td><span t-field="line.price_unit" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/></td>
+                        <td><span t-field="line.price_total" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/></td>
+                      </tr>
+                      <tr t-if="line.display_type == 'line_section'">
+                        <td colspan="4"><strong t-field="line.name"/></td>
+                      </tr>
+                      <tr t-if="line.display_type == 'line_note'">
+                        <td colspan="4"><i t-field="line.name"/></td>
+                      </tr>
+                    </t>
+                  </tbody>
+                </table>
+                <div class="ipx-totals">
+                  <div class="ipx-totals-row" t-if="sale_order.amount_tax">
+                    <span>Taxes</span>
+                    <span t-field="sale_order.amount_tax" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+                  </div>
+                  <div class="ipx-totals-row ipx-totals-total">
+                    <span>Total</span>
+                    <span t-field="sale_order.amount_total" t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Savings - dynamic, computed from the three Studio fields on sale.order -->
+              <t t-set="ipx_user_count" t-value="sale_order.x_studio_integer_field_11b_1jul387j9 or 0"/>
+              <t t-set="ipx_monthly_rate" t-value="sale_order.x_studio_monetary_field_2gl_1jul3gsf0 or 0.0"/>
+              <t t-set="ipx_onsite_rate" t-value="sale_order.x_studio_monetary_field_1el_1jul3fpp6 or 0.0"/>
+              <t t-set="ipx_traditional_annual_savings" t-value="(159 - ipx_monthly_rate) * ipx_user_count * 12"/>
+              <t t-set="ipx_modern_annual_savings" t-value="(259 - ipx_monthly_rate) * ipx_user_count * 12"/>
+
+              <div class="savings-clarification">
+                <h3>These figures are estimated savings—not amounts you pay.</h3>
+                <p>
+                  The numbers below are not added to your quotation, invoice, or contract total.
+                  They show how much the organization may retain by paying the IPPBX rate instead
+                  of the comparison benchmarks. Only the Commercial Proposal total is payable.
+                </p>
+              </div>
+
+              <div class="savings-heading">
+                <div style="font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1f6feb;">Estimated Annual Savings</div>
+                <h3>Money that may remain in your organization's budget</h3>
+                <p>Illustrative comparison based on <t t-esc="ipx_user_count"/> users.</p>
+              </div>
+
+              <div class="savings-clear-grid">
+                <div class="savings-clear-card">
+                  <strong t-esc="'${:,.0f}'.format(ipx_traditional_annual_savings)"/>
+                  <span>Estimated annual savings compared with $159 traditional managed IT</span>
+                </div>
+
+                <div class="savings-clear-card">
+                  <strong t-esc="'${:,.0f}'.format(ipx_modern_annual_savings)"/>
+                  <span>Estimated annual savings compared with a $259 modern workplace</span>
+                </div>
+              </div>
+
+              <div class="optional-rate-box">
+                <div>
+                  <h3 style="margin:0 0 6px;">Optional onsite technical support</h3>
+                  <p>Billed only when requested or approved, plus agreed travel time.</p>
+                </div>
+                <div class="optional-rate-price">
+                  <strong t-esc="'${:,.2f}/hr'.format(ipx_onsite_rate)"/>
+                  <span>Only when used</span>
+                </div>
+              </div>
+
+              <!-- Terms & Conditions / Payment terms - mirrors .terms-grid / .terms-box -->
+              <div class="ipx-terms-grid" t-if="sale_order.note or sale_order.payment_term_id">
+                <div class="ipx-terms-box" t-if="sale_order.note">
+                  <h3>Terms &amp; Conditions</h3>
+                  <div t-field="sale_order.note"/>
+                </div>
+                <div class="ipx-terms-box" t-if="sale_order.payment_term_id">
+                  <h3>Payment Terms</h3>
+                  <p t-field="sale_order.payment_term_id.name"/>
+                </div>
+              </div>
+
+              <!-- Assumptions & Scope -->
+              <div class="ipx-card">
+                <div class="ipx-section-label">Assumptions &amp; Scope</div>
+                <h2 style="font-size:1.5rem;">What the proposal includes - and what requires separate scope</h2>
+                <div class="ipx-terms-grid" style="margin-top:16px;">
+                  <div class="ipx-terms-box">
+                    <h3>Proposal assumptions</h3>
+                    <ul class="ipx-muted">
+                      <li>Standard business-user computing requirements</li>
+                      <li>Agreed storage policy</li>
+                      <li>Remote-first support</li>
+                      <li>Google Workspace remains properly licensed</li>
+                      <li>Migration performed in agreed phases</li>
+                      <li>Timely access to required systems and credentials</li>
+                    </ul>
+                  </div>
+                  <div class="ipx-terms-box">
+                    <h3>Separately scoped items</h3>
+                    <ul class="ipx-muted">
+                      <li>Computers and physical hardware</li>
+                      <li>Third-party software licenses</li>
+                      <li>Internet service and carrier charges</li>
+                      <li>Major network redesign or new cabling</li>
+                      <li>Specialized applications</li>
+                      <li>Custom integrations or software development</li>
+                      <li>Onsite work, travel, parking, tolls, and materials</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CTA / bottom actions - mirrors .cta / .cta-grid -->
+            <div t-if="sale_order._has_to_be_signed() or sale_order._has_to_be_paid()" class="ipx-cta d-print-none" name="sale_order_actions">
+              <div class="ipx-cta-grid">
+                <div>
+                  <div class="ipx-section-label" style="color:var(--ipx-cyan)">Recommended Next Step</div>
+                  <h2 style="font-size:1.6rem;">Begin with discovery, then move department by department.</h2>
+                  <p>
+                    IPPBX will confirm the final user count, employee roles, applications, Google Workspace structure,
+                    storage, security requirements, current-provider transition, pilot group, and rollout sequence
+                    before any department is migrated. By signing below, <b t-field="sale_order.partner_id.commercial_partner_id"/>
+                    authorizes IPPBX to proceed according to the scope, pricing, assumptions, and commercial terms
+                    described in this proposal.
+                  </p>
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                  <t t-if="sale_order._has_to_be_signed()">
+                    <a role="button" class="ipx-btn ipx-btn-primary" data-bs-toggle="modal" data-bs-target="#modalaccept" href="#"><i class="fa fa-check"/><t t-if="sale_order._has_to_be_paid()"> Sign &amp; Pay</t><t t-else=""> Accept &amp; Sign</t></a>
+                    <a role="button" class="ipx-btn ipx-btn-secondary" href="#discussion"><i class="fa fa-comment"/> Feedback</a>
+                    <a role="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modaldecline" href="#"> <i class="fa fa-times"/> Reject</a>
+                  </t>
+                  <a t-elif="sale_order._has_to_be_paid()" role="button" data-bs-toggle="modal" data-bs-target="#modalaccept" href="#" t-att-class="'ipx-btn %s' % ('ipx-btn-secondary' if sale_order.transaction_ids else 'ipx-btn-primary')">
+                    <i class="fa fa-check"/> <t t-if="not sale_order.signature">Accept &amp; Pay</t><t t-else="">Pay Now</t>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- chatter -->
+            <div class="ipx-card" id="sale_order_communication">
+              <div class="ipx-section-label">Discussion</div>
+              <h2 style="font-size:1.5rem;">Communication history</h2>
+              <t t-call="portal.message_thread"/>
+            </div>
+
+            <!-- footer - mirrors the dark footer bar from the HTML design -->
+            <div class="ipx-footer d-print-none">
+              <span>Confidential quotation prepared for <t t-esc="sale_order.partner_id.name"/></span>
+              <span t-esc="sale_order.company_id.name"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </template>
+</odoo>

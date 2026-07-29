@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="quotation_template_default" model="quotation.template">
+        <field name="name">Default Odoo</field>
+        <field name="code">default</field>
+        <field name="is_default" eval="True"/>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="quotation_template_general_proposal" model="quotation.template">
+        <field name="name">General Proposal</field>
+        <field name="code">general_proposal</field>
+        <field name="view_id" ref="quotation_template_content_general_proposal"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="quotation_template_law" model="quotation.template">
+        <field name="name">Law Proposal</field>
+        <field name="code">law</field>
+        <field name="view_id" ref="quotation_template_content_law"/>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="quotation_template_medical" model="quotation.template">
+        <field name="name">Medical Proposal</field>
+        <field name="code">medical</field>
+        <field name="view_id" ref="quotation_template_content_medical"/>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="quotation_template_religious" model="quotation.template">
+        <field name="name">Religious Proposal</field>
+        <field name="code">religious</field>
+        <field name="view_id" ref="quotation_template_content_religious"/>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="quotation_template_phone_system" model="quotation.template">
+        <field name="name">Phone System</field>
+        <field name="code">phone_system</field>
+        <field name="view_id" ref="quotation_template_content_phone_system"/>
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- PROVISIONAL: is_default_selection marks what NEW quotations get by
+         default. Set here to Non Profit Proposal to match current live
+         behaviour (see chat) - flip this flag in the UI, or ask to change it,
+         if Default Odoo should be the starting point for new quotations instead. -->
+    <record id="quotation_template_modern_digital_workplace" model="quotation.template">
+        <field name="name">Non Profit Proposal</field>
+        <field name="code">non_profit</field>
+        <field name="view_id" ref="quotation_template_content_modern_digital_workplace"/>
+        <field name="is_default_selection" eval="True"/>
+        <field name="sequence">60</field>
+    </record>
+
+</odoo>

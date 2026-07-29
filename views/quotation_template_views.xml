@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_quotation_template_list" model="ir.ui.view">
+        <field name="name">quotation.template.list</field>
+        <field name="model">quotation.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_default"/>
+                <field name="is_default_selection"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_quotation_template_form" model="ir.ui.view">
+        <field name="name">quotation.template.form</field>
+        <field name="model">quotation.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="is_default"/>
+                        <field name="is_default_selection"/>
+                        <field name="view_id" invisible="is_default" required="not is_default"/>
+                        <field name="active"/>
+                        <field name="sequence"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_quotation_template" model="ir.actions.act_window">
+        <field name="name">Quotation Templates</field>
+        <field name="res_model">quotation.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_quotation_template"
+              name="Quotation Templates"
+              parent="sale.menu_sale_config"
+              action="action_quotation_template"
+              sequence="60"/>
+
+</odoo>
