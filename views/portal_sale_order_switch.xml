@@ -13,10 +13,14 @@
 
         Everything outside the replaced div (the edit-mode banner t-set, the
         outer xpath target) still comes from the stock view, untouched.
+
+        Do NOT set a "model" field on this record. The parent (sale.sale_order_portal_template)
+        has no model set, and giving this extension view its own model prevented Odoo
+        from combining it into the parent's website-scoped render at all - the page
+        silently fell back to plain stock content with no error. Confirmed by testing.
     -->
     <record id="view_sale_order_portal_template_switch" model="ir.ui.view">
         <field name="name">sale.order.portal.template.switch</field>
-        <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.sale_order_portal_template"/>
         <field name="arch" type="xml">
             <xpath expr="//div[hasclass('o_portal_sale_sidebar')]" position="replace">
