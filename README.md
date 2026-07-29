@@ -36,13 +36,13 @@ install this module - just reset it right before installing, not before.
   Proposal.
 - `views/template_general_proposal.xml`, `template_law.xml`, `template_medical.xml`,
   `template_religious.xml`, `template_phone_system.xml` - generated from the raw
-  HTML proposals. Customer/proposal-number/salesperson/valid-until/total, and the
-  Products table (name, quantity, unit price, amount, taxes, total), are all
-  dynamic - bound to the real `sale_order` and `sale_order.order_line`, same
-  pattern as Non Profit Proposal. Only the savings/benchmark-comparison callout
-  (estimated annual savings vs. a "typical" monthly cost) stays a **static
-  placeholder number**, since there's no field yet for the customer's actual
-  current phone bill to compare against - clearly commented in each file.
+  HTML proposals. Everything is dynamic now, bound to the real `sale_order`:
+  customer/proposal-number/salesperson/valid-until/total, the Products table
+  (name, quantity, unit price, amount, taxes, total) from `sale_order.order_line`,
+  and the savings-comparison callout, computed as
+  `(x_studio_monetary_field_4n_1junkim7e - x_studio_monetary_field_2gl_1jul3gsf0) * 12`
+  ("Current Custom Monthly Bill" minus "Monthly rate", both Studio fields on
+  sale.order) - same pattern Non Profit Proposal already used for its own numbers.
 - `views/template_modern_digital_workplace.xml` ("Non Profit Proposal" in the
   dropdown) - the non-profit.xml design, unchanged, including its dynamic
   order-line pricing table. Left as-is per request.
@@ -73,8 +73,25 @@ content for the real Phone System copy whenever the boss sends distinct text.
 
 1. Get distinct content for the "Phone System" template (see above) - currently
    a re-skinned duplicate of Medical Proposal.
-2. Decide if a real field/comparison basis should replace the static
-   savings-callout numbers in the 5 non-Non-Profit templates, or if that stays
-   illustrative permanently.
-3. Decide if/how the PDF report (Print / emailed attachment) should also follow
+2. Decide if/how the PDF report (Print / emailed attachment) should also follow
    `quotation_template_id` - out of scope for this pass (portal-only).
+
+## Gotchas hit during setup (fixed, kept here for reference)
+
+- **Never set `model` on `portal_sale_order_switch.xml`'s record.** Its parent
+  (`sale.sale_order_portal_template`) has no model set; giving the extension
+  view its own model silently prevented Odoo from combining it into the
+  website-scoped render - the page fell back to plain stock content with no
+  error, for every quotation regardless of the selected design. Confirmed live
+  by adding a visible marker div to the arch and watching it not appear until
+  the model field was cleared.
+- A website-specific ("Website" column filled in) copy of
+  `sale.sale_order_portal_template` can silently shadow the generic one for an
+  entire website, ignoring any new module-added extension views entirely. This
+  happens when a portal page is edited via the frontend's HTML/code editor
+  while a website is selected. Check Settings > Technical > Views, filter
+  Inherited View = Sidebar, for a duplicate row with a Website value - deactivate
+  it (don't need to delete) if found.
+- Grid CSS needs a breakpoint below 950px too. The tablet breakpoint (950px)
+  only drops most grids to 2 columns; without a second one under ~640px, cards
+  are cramped/clipped on real phone screens.
