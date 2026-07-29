@@ -249,6 +249,13 @@
           .ipx-hero-grid, .ipx-cta-grid, .ipx-terms-grid, .ipx-intro-grid, .ipx-pricing-grid { grid-template-columns: 1fr; }
           .ipx-priority-grid, .ipx-journey, .ipx-phase-grid, .ipx-service-grid, .ipx-savings { grid-template-columns: 1fr 1fr; }
         }
+        /* True phone widths: the 2-column fallback above is still too
+           cramped (cards clipped/overlapping) - drop to a single column. */
+        @media (max-width: 640px) {
+          .ipx-priority-grid, .ipx-journey, .ipx-phase-grid, .ipx-service-grid, .ipx-savings {
+            grid-template-columns: 1fr;
+          }
+        }
 
         /* Savings clarification block - green "not a charge" styling */
         .savings-clarification { margin-top: 30px; padding: 25px 28px; border-radius: 20px; border: 1px solid #bfe4d3; background: linear-gradient(145deg,#effbf6,#fff); }

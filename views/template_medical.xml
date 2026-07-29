@@ -192,6 +192,14 @@
           .med-priority-grid, .med-workflow-grid, .med-apps-grid, .med-metrics-grid,
           .med-phone-stack, .med-experience-grid, .med-connection-flow, .med-phase-grid { grid-template-columns: 1fr 1fr; }
         }
+        /* True phone widths: the 2-column fallback above is still too
+           cramped (cards clipped/overlapping) - drop to a single column. */
+        @media (max-width: 640px) {
+          .med-priority-grid, .med-workflow-grid, .med-apps-grid, .med-metrics-grid,
+          .med-phone-stack, .med-experience-grid, .med-connection-flow, .med-phase-grid {
+            grid-template-columns: 1fr;
+          }
+        }
 
         </style>
 

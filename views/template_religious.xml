@@ -192,6 +192,14 @@
           .rel-priority-grid, .rel-workflow-grid, .rel-apps-grid, .rel-metrics-grid,
           .rel-phone-stack, .rel-experience-grid, .rel-connection-flow, .rel-phase-grid { grid-template-columns: 1fr 1fr; }
         }
+        /* True phone widths: the 2-column fallback above is still too
+           cramped (cards clipped/overlapping) - drop to a single column. */
+        @media (max-width: 640px) {
+          .rel-priority-grid, .rel-workflow-grid, .rel-apps-grid, .rel-metrics-grid,
+          .rel-phone-stack, .rel-experience-grid, .rel-connection-flow, .rel-phase-grid {
+            grid-template-columns: 1fr;
+          }
+        }
 
         </style>
 

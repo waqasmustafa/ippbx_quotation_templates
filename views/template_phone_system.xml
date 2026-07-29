@@ -192,6 +192,14 @@
           .ph-priority-grid, .ph-workflow-grid, .ph-apps-grid, .ph-metrics-grid,
           .ph-phone-stack, .ph-experience-grid, .ph-connection-flow, .ph-phase-grid { grid-template-columns: 1fr 1fr; }
         }
+        /* True phone widths: the 2-column fallback above is still too
+           cramped (cards clipped/overlapping) - drop to a single column. */
+        @media (max-width: 640px) {
+          .ph-priority-grid, .ph-workflow-grid, .ph-apps-grid, .ph-metrics-grid,
+          .ph-phone-stack, .ph-experience-grid, .ph-connection-flow, .ph-phase-grid {
+            grid-template-columns: 1fr;
+          }
+        }
 
         </style>
 

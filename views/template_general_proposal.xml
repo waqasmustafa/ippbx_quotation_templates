@@ -192,6 +192,14 @@
           .gp-priority-grid, .gp-workflow-grid, .gp-apps-grid, .gp-metrics-grid,
           .gp-phone-stack, .gp-experience-grid, .gp-connection-flow, .gp-phase-grid { grid-template-columns: 1fr 1fr; }
         }
+        /* True phone widths: the 2-column fallback above is still too
+           cramped (cards clipped/overlapping) - drop to a single column. */
+        @media (max-width: 640px) {
+          .gp-priority-grid, .gp-workflow-grid, .gp-apps-grid, .gp-metrics-grid,
+          .gp-phone-stack, .gp-experience-grid, .gp-connection-flow, .gp-phase-grid {
+            grid-template-columns: 1fr;
+          }
+        }
 
         </style>
 

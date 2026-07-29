@@ -192,6 +192,14 @@
           .law-priority-grid, .law-workflow-grid, .law-apps-grid, .law-metrics-grid,
           .law-phone-stack, .law-experience-grid, .law-connection-flow, .law-phase-grid { grid-template-columns: 1fr 1fr; }
         }
+        /* True phone widths: the 2-column fallback above is still too
+           cramped (cards clipped/overlapping) - drop to a single column. */
+        @media (max-width: 640px) {
+          .law-priority-grid, .law-workflow-grid, .law-apps-grid, .law-metrics-grid,
+          .law-phone-stack, .law-experience-grid, .law-connection-flow, .law-phase-grid {
+            grid-template-columns: 1fr;
+          }
+        }
 
         </style>
 
