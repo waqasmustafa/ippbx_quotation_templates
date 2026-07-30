@@ -227,8 +227,8 @@
         .savings-clarification h3 { margin: 0 0 7px; color: #115f43 !important; }
         .savings-clarification p { margin: 0; color: #617086 !important; }
         .savings-heading { text-align: center; margin-top: 30px; }
-        .savings-heading h3 { margin: 5px 0; color: var(--itm-navy) !important; }
-        .savings-heading p { color: var(--itm-muted) !important; }
+        .savings-heading h3 { margin: 5px 0; color: #fff !important; }
+        .savings-heading p { color: #bed0df !important; }
         .savings-clear-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 22px; }
         .savings-clear-card { padding: 26px; border: 1px solid #bfe4d3; border-radius: 18px; text-align: center; background: #fff; }
         .savings-clear-card::before {
